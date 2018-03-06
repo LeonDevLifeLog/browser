@@ -1,31 +1,30 @@
 package com.github.leondevlifelog.browser
 
-import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import android.support.v4.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import com.tencent.smtt.sdk.CookieSyncManager
 import com.tencent.smtt.sdk.WebSettings
 import com.tencent.smtt.sdk.WebView
 import com.tencent.smtt.sdk.WebViewClient
 import com.tencent.smtt.utils.TbsLog
-import kotlinx.android.synthetic.main.activity_main.*
 
-/**
- * 首页
- *
- * @author Leon <leondevlifelog@gmail.com>
- * @version v0.0.1
- * @date 2018-03-05 22:28
- */
-class MainActivity : AppCompatActivity() {
+
+class TestFragment : Fragment() {
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        window.setFlags(android.view.WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED,
-                android.view.WindowManager.LayoutParams.FLAG_HARDWARE_ACCELERATED)
-        setContentView(R.layout.activity_main)
-        startActivity(Intent(this, SecondActivity::class.java))
-        finish()
+        if (arguments != null) {
+        }
+    }
+
+    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
+        var view = inflater!!.inflate(R.layout.fragment_test, container, false)
+        var webView = view.findViewById<NestedWebView>(R.id.mWebView)
         webView.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(web: WebView?, url: String?): Boolean {
                 return false
@@ -45,9 +44,9 @@ class MainActivity : AppCompatActivity() {
         webSetting.javaScriptEnabled = true
         webSetting.setGeolocationEnabled(true)
         webSetting.setAppCacheMaxSize(java.lang.Long.MAX_VALUE)
-        webSetting.setAppCachePath(this.getDir("appcache", 0).path)
-        webSetting.databasePath = this.getDir("databases", 0).path
-        webSetting.setGeolocationDatabasePath(this.getDir("geolocation", 0)
+        webSetting.setAppCachePath(activity.getDir("appcache", 0).path)
+        webSetting.databasePath = activity.getDir("databases", 0).path
+        webSetting.setGeolocationDatabasePath(activity.getDir("geolocation", 0)
                 .path)
         // webSetting.setPageCacheCapacity(IX5WebSettings.DEFAULT_CACHE_CAPACITY);
         webSetting.pluginState = WebSettings.PluginState.ON_DEMAND
@@ -55,8 +54,19 @@ class MainActivity : AppCompatActivity() {
         // webSetting.setPreFectch(true);
         val time = System.currentTimeMillis()
         TbsLog.d("time-cost", "cost time: " + (System.currentTimeMillis() - time))
-        CookieSyncManager.createInstance(this)
+        CookieSyncManager.createInstance(activity)
         CookieSyncManager.getInstance().sync()
         webView.loadUrl("http://www.baidu.com")
+        return view
     }
+
+    companion object {
+        fun newInstance(): TestFragment {
+            val fragment = TestFragment()
+            val args = Bundle()
+            fragment.arguments = args
+            return fragment
+        }
+    }
+
 }
