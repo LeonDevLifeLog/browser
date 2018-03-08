@@ -57,6 +57,5 @@ class MainActivity : AppCompatActivity() {
         TbsLog.d("time-cost", "cost time: " + (System.currentTimeMillis() - time))
         CookieSyncManager.createInstance(this)
         CookieSyncManager.getInstance().sync()
-        webView.loadUrl("http://www.baidu.com")
     }
 }
