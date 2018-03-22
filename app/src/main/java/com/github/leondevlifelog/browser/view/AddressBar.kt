@@ -28,19 +28,24 @@ class AddressBar : AutoCompleteTextView, TextWatcher {
 
     interface OnDrawableClickListener {
         /**
-         * 扫描二维码图片点击事件
+         * 扫描二维码图标被点击事件
          */
         fun onScanDrawableClick()
 
         /**
-         * https通讯图片点击事件
+         * https通讯图标被点击事件
          */
         fun onSecurityDrawableClick()
 
         /**
-         * http通讯图片点击事件
+         * http通讯图标被点击事件
          */
         fun onNoneSecurityDrawableClick()
+
+        /**
+         * 搜索图标被点击事件
+         */
+        fun onSearchDrawableClick()
     }
 
     var onScanBtnClickListener: OnDrawableClickListener? = null
@@ -80,25 +85,30 @@ class AddressBar : AutoCompleteTextView, TextWatcher {
                     return false
                 if ((e.x > width - paddingRight - drawableWidth - drawablePadding)
                         && compoundDrawables[2] == drawableClear) {
-                    Log.d(TAG, "simpleOnGestureListener ondrawableClear")
+                    Log.d(TAG, "ondrawableClear")
                     setText("")
                     setLeftDrawable(drawableSearch)
                     setRightDrawable(drawableScan)
                     return true
                 } else if ((e.x > width - paddingRight - drawableWidth - drawablePadding)
                         && compoundDrawables[2] == drawableScan) {
-                    Log.d(TAG, "simpleOnGestureListener onScanDrawableClick")
+                    Log.d(TAG, "onScanDrawableClick")
                     onScanBtnClickListener?.onScanDrawableClick()
                     return true
                 } else if (e.x < paddingLeft + drawableWidth + drawablePadding
                         && compoundDrawables[0] == drawableSecurity) {
-                    Log.d(TAG, "simpleOnGestureListener onSecurityDrawableClick: ")
+                    Log.d(TAG, "onSecurityDrawableClick")
                     onScanBtnClickListener?.onSecurityDrawableClick()
                     return true
                 } else if (e.x < paddingLeft + drawableWidth + drawablePadding
                         && compoundDrawables[0] == drawableNoneSecurity) {
-                    Log.d(TAG, "simpleOnGestureListener onNoneSecurityDrawableClick: ")
+                    Log.d(TAG, "onNoneSecurityDrawableClick")
                     onScanBtnClickListener?.onNoneSecurityDrawableClick()
+                    return true
+                } else if (e.x < paddingLeft + drawableWidth + drawablePadding
+                        && compoundDrawables[0] == drawableSearch) {
+                    Log.d(TAG, "onSearchDrawableClick")
+                    onScanBtnClickListener?.onSearchDrawableClick()
                     return true
                 }
                 return super.onSingleTapConfirmed(e)
