@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/colorPrimary"
+    tools:context=".view.HeaderView">
+
+    <com.github.leondevlifelog.browser.view.AddressBar
+        android:id="@+id/autoCompleteTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/view_header_search_et_bg"
+        android:drawablePadding="8dp"
+        android:dropDownAnchor="@id/autoCompleteTextView"
+        android:dropDownWidth="match_parent"
+        android:gravity="center_vertical"
+        android:hint="@string/view_header_keywords_or_url"
+        android:imeOptions="actionDone"
+        android:inputType="textUri|text"
+        android:maxLines="1"
+        android:minLines="1"
+        android:padding="8dp"
+        android:singleLine="true"
+        android:textSize="14sp"
+        app:drawableClear="@drawable/ic_clear"
+        app:drawableNoneSecurity="@drawable/ic_warning"
+        app:drawableScan="@drawable/ic_scanning"
+        app:drawableSearch="@drawable/ic_search"
+        app:drawableSecurity="@drawable/ic_security" />
+
+    <ProgressBar
+        style="@android:style/Widget.DeviceDefault.Light.ProgressBar.Small"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:visibility="invisible" />
+</RelativeLayout>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="AddressBar">
+        <attr name="drawableSecurity" format="reference" />
+        <attr name="drawableNoneSecurity" format="reference" />
+        <attr name="drawableScan" format="reference" />
+        <attr name="drawableClear" format="reference" />
+        <attr name="drawableSearch" format="reference" />
+    </declare-styleable>
+</resources>

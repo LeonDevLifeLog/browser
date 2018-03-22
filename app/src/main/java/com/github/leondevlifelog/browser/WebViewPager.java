@@ -26,19 +26,14 @@ public class WebViewPager extends ViewPager {
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent ev) {
-        if (!isScrollEnable)
-            return false;
-        else
-            return super.onTouchEvent(ev);
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+
+        return isScrollEnable || super.onInterceptTouchEvent(ev);
     }
 
     @Override
-    public boolean onInterceptTouchEvent(MotionEvent ev) {
-        if (!isScrollEnable)
-            return false;
-        else
-            return super.onInterceptTouchEvent(ev);
+    public boolean onTouchEvent(MotionEvent ev) {
+        return isScrollEnable || super.onInterceptTouchEvent(ev);
     }
 
     public Boolean getScrollEnable() {

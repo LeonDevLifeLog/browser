@@ -24,7 +24,7 @@ class TestFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         var view = inflater!!.inflate(R.layout.fragment_test, container, false)
-        var webView = view.findViewById<NestedWebView>(R.id.mWebView)
+        var webView = view.findViewById<WebView>(R.id.mWebView)
         webView.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(web: WebView?, url: String?): Boolean {
                 return false
