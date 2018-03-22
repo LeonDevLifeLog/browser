@@ -55,7 +55,6 @@ class AddressBar : AutoCompleteTextView, TextWatcher {
     private var drawableNoneSecurity: Drawable? = null
     private var drawableSearch: Drawable? = null
     val drawableWidth = _dip2px(24)
-    val drawablePadding = _dip2px(10)
     var simpleOnGestureListener: GestureDetector.SimpleOnGestureListener? = null
 
     constructor(context: Context) : super(context) {
@@ -81,32 +80,35 @@ class AddressBar : AutoCompleteTextView, TextWatcher {
         a.recycle()
         simpleOnGestureListener = object : GestureDetector.SimpleOnGestureListener() {
             override fun onSingleTapConfirmed(e: MotionEvent?): Boolean {
-                if (e!!.action != MotionEvent.ACTION_UP)
+                /**
+                 * 左侧drawable的右边边界x坐标值
+                 */
+                var drawableLeftWidthPoint = e!!.x < paddingLeft + drawableWidth + compoundDrawablePadding
+                /**
+                 * 右侧drawable的左边边界x坐标值
+                 */
+                var drawableRightWidthPoint = e.x > width - paddingRight - drawableWidth - compoundDrawablePadding
+                if (e.action != MotionEvent.ACTION_UP)
                     return false
-                if ((e.x > width - paddingRight - drawableWidth - drawablePadding)
-                        && compoundDrawables[2] == drawableClear) {
+                if (drawableRightWidthPoint && compoundDrawables[2] == drawableClear) {
                     Log.d(TAG, "ondrawableClear")
                     setText("")
                     setLeftDrawable(drawableSearch)
                     setRightDrawable(drawableScan)
                     return true
-                } else if ((e.x > width - paddingRight - drawableWidth - drawablePadding)
-                        && compoundDrawables[2] == drawableScan) {
+                } else if (drawableRightWidthPoint && compoundDrawables[2] == drawableScan) {
                     Log.d(TAG, "onScanDrawableClick")
                     onScanBtnClickListener?.onScanDrawableClick()
                     return true
-                } else if (e.x < paddingLeft + drawableWidth + drawablePadding
-                        && compoundDrawables[0] == drawableSecurity) {
+                } else if (drawableLeftWidthPoint && compoundDrawables[0] == drawableSecurity) {
                     Log.d(TAG, "onSecurityDrawableClick")
                     onScanBtnClickListener?.onSecurityDrawableClick()
                     return true
-                } else if (e.x < paddingLeft + drawableWidth + drawablePadding
-                        && compoundDrawables[0] == drawableNoneSecurity) {
+                } else if (drawableLeftWidthPoint && compoundDrawables[0] == drawableNoneSecurity) {
                     Log.d(TAG, "onNoneSecurityDrawableClick")
                     onScanBtnClickListener?.onNoneSecurityDrawableClick()
                     return true
-                } else if (e.x < paddingLeft + drawableWidth + drawablePadding
-                        && compoundDrawables[0] == drawableSearch) {
+                } else if (drawableLeftWidthPoint && compoundDrawables[0] == drawableSearch) {
                     Log.d(TAG, "onSearchDrawableClick")
                     onScanBtnClickListener?.onSearchDrawableClick()
                     return true
