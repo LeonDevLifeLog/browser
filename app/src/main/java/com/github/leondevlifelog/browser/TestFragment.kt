@@ -21,8 +21,7 @@ class TestFragment : Fragment() {
         }
     }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         var view = inflater!!.inflate(R.layout.fragment_test, container, false)
         var webView = view.findViewById<WebView>(R.id.mWebView)
         webView.webViewClient = object : WebViewClient() {
@@ -44,9 +43,9 @@ class TestFragment : Fragment() {
         webSetting.javaScriptEnabled = true
         webSetting.setGeolocationEnabled(true)
         webSetting.setAppCacheMaxSize(java.lang.Long.MAX_VALUE)
-        webSetting.setAppCachePath(activity.getDir("appcache", 0).path)
-        webSetting.databasePath = activity.getDir("databases", 0).path
-        webSetting.setGeolocationDatabasePath(activity.getDir("geolocation", 0)
+        webSetting.setAppCachePath(activity!!.getDir("appcache", 0).path)
+        webSetting.databasePath = activity!!.getDir("databases", 0).path
+        webSetting.setGeolocationDatabasePath(activity!!.getDir("geolocation", 0)
                 .path)
         // webSetting.setPageCacheCapacity(IX5WebSettings.DEFAULT_CACHE_CAPACITY);
         webSetting.pluginState = WebSettings.PluginState.ON_DEMAND
