@@ -77,7 +77,8 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:paddingBottom="1dp"
-            android:text="33" />
+            android:text="33"
+            android:textColor="@color/colorIcon" />
 
     </FrameLayout>
 
