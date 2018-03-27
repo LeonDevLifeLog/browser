@@ -12,15 +12,19 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
+import android.widget.ArrayAdapter
 import android.widget.FrameLayout
 import com.github.leondevlifelog.browser.R
 import kotlinx.android.synthetic.main.view_address_bar.view.*
+
 
 /**
  *
  */
 class AddressBarView : FrameLayout {
     val TAG: String = "AddressBarView"
+    private val COUNTRIES = arrayOf("abcdAfghanistan", "asdasdf", "asdasdf", "asdasdf", "asdasdf", "asdasdf", "asdasdf", "asdasdf", "asdasdf", "asdasdf", "asdasdf", "Albania", "Algeria", "American Samoa", "Andorra", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Cote d'Ivoire", "Cambodia", "Cameroon", "Canada", "Cape Verde", "Democratic Republic of the Congo", "Denmark", "Djibouti", "Dominica", "East Timor", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea")
 
     interface OnActionButtonClickListener {
         fun onScanBtnClick(v: View): Unit
@@ -30,16 +34,12 @@ class AddressBarView : FrameLayout {
         fun onInputDone(urlOrKeyWord: String): Unit
     }
 
-    var drawableClear: Drawable? = null
-    var drawableSearch: Drawable? = null
-    var drawableSecurity: Drawable? = null
-    var drawableNoneSecurity: Drawable? = null
-    var drawableScan: Drawable? = null
+    private var drawableClear: Drawable? = null
+    private var drawableSearch: Drawable? = null
+    private var drawableSecurity: Drawable? = null
+    private var drawableNoneSecurity: Drawable? = null
+    private var drawableScan: Drawable? = null
     var onActionButtonClickListener: OnActionButtonClickListener? = null
-        get() = field
-        set(value) {
-            field = value
-        }
 
     constructor(context: Context) : super(context) {
         init(null, 0)
@@ -76,8 +76,9 @@ class AddressBarView : FrameLayout {
         actionScan.setOnClickListener { v -> onActionButtonClickListener?.onScanBtnClick(v) }
         actionClearInput.setOnClickListener { urlInputBox.setText("") }
         urlInputBox.setOnFocusChangeListener { v, hasFocus ->
-            if (hasFocus && urlInputBox.text.isNotEmpty()) actionClearInput.visibility = View.VISIBLE
-            else {
+            if (hasFocus && urlInputBox.text.isNotEmpty()) {
+                actionClearInput.visibility = View.VISIBLE
+            } else {
                 actionClearInput.visibility = View.GONE
                 urlInputBox.setSelection(0)
             }
@@ -118,11 +119,20 @@ class AddressBarView : FrameLayout {
         })
         urlInputBox.setOnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_GO) {
-                urlInputBox.clearFocus()
+                var inputService = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                if (v.hasFocus()) {
+                    inputService.hideSoftInputFromWindow(v.windowToken, 0)
+                    v.isFocusableInTouchMode = false
+                    v.isFocusable = false
+                    v.isFocusableInTouchMode = true
+                    v.isFocusable = true
+                }
                 onActionButtonClickListener?.onInputDone(urlInputBox.text.toString())
             }
             false
         }
+        val adapter = ArrayAdapter<String>(context, android.R.layout.simple_dropdown_item_1line, COUNTRIES)
+        urlInputBox.setAdapter(adapter)
     }
 
     /**
