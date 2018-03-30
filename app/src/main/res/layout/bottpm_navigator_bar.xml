@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:id="@+id/bottomNavigatorBar"
+    android:layout_height="@dimen/bottom_navigator_height"
     android:background="@drawable/top_line_bg"
     tools:layout_editor_absoluteY="25dp">
 
@@ -76,7 +77,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="center"
-            android:paddingBottom="1dp"
+            android:fontFamily="sans-serif-light"
             android:text="33"
             android:textColor="@color/colorIcon" />
 

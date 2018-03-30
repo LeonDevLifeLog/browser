@@ -5,22 +5,19 @@ import android.support.v7.app.AppCompatActivity
 import android.view.View
 import com.github.leondevlifelog.browser.R
 import com.github.leondevlifelog.browser.view.AddressBarView
-import com.qmuiteam.qmui.widget.popup.QMUIPopup
+import com.github.leondevlifelog.browser.view.MenuPopupWindow
+import com.labo.kaji.relativepopupwindow.RelativePopupWindow
 import kotlinx.android.synthetic.main.activity_test.*
+import kotlinx.android.synthetic.main.bottpm_navigator_bar.*
 
 
 class TestActivity : AppCompatActivity() {
-    var mNormalPopup: QMUIPopup? = null
+    val TAG: String = "TestActivity"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_test)
-        initNormalPopupIfNeed()
         addressBarView.onActionButtonClickListener = object : AddressBarView.OnActionButtonClickListener {
             override fun onSecurityBtnClick(v: View) {
-                mNormalPopup?.setAnimStyle(QMUIPopup.ANIM_GROW_FROM_LEFT)
-                mNormalPopup?.setPreferredDirection(QMUIPopup.DIRECTION_BOTTOM)
-                mNormalPopup?.setPopupLeftRightMinMargin(0)
-                mNormalPopup?.show(v)
             }
 
             override fun onNoneSecurityBtnClick(v: View) {
@@ -35,12 +32,21 @@ class TestActivity : AppCompatActivity() {
             override fun onScanBtnClick(v: View) {
             }
         }
+        var relativePopupWindow = MenuPopupWindow(this)
+        actionMenu.setOnClickListener({ v ->
+            if (!relativePopupWindow.isShowing)
+                relativePopupWindow.showOnAnchor(v, RelativePopupWindow.VerticalPosition.ALIGN_BOTTOM,
+                        RelativePopupWindow.HorizontalPosition.ALIGN_LEFT)
+            else
+                relativePopupWindow.dismiss()
+        })
+        actionTabs.setOnClickListener({ v ->
+            if (!relativePopupWindow.isShowing)
+                relativePopupWindow.showOnAnchor(v, RelativePopupWindow.VerticalPosition.ALIGN_BOTTOM,
+                        RelativePopupWindow.HorizontalPosition.ALIGN_LEFT)
+            else
+                relativePopupWindow.dismiss()
+        })
     }
 
-    private fun initNormalPopupIfNeed() {
-        if (mNormalPopup == null) {
-            mNormalPopup = QMUIPopup(this, QMUIPopup.DIRECTION_NONE)
-            mNormalPopup?.setContentView(R.layout.tip_layout)
-        }
-    }
 }
