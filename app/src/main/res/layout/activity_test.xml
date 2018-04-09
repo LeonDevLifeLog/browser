@@ -1,42 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/textContent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/textContent"
     tools:context="com.github.leondevlifelog.browser.ui.TestActivity">
 
-    <com.github.leondevlifelog.browser.view.AddressBarView
-        android:id="@+id/addressBarView"
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:drawableClear="@drawable/ic_clear"
-        app:drawableNoneSecurity="@drawable/ic_warning"
-        app:drawableScan="@drawable/ic_scanning"
-        app:drawableSearch="@drawable/ic_search"
-        app:drawableSecurity="@drawable/ic_security"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:elevation="0dp">
 
-    <EditText
-        android:id="@+id/editText"
-        android:layout_width="wrap_content"
+        <com.github.leondevlifelog.browser.view.AddressBarView
+            android:id="@+id/addressBarView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            app:drawableClear="@drawable/ic_clear"
+            app:drawableNoneSecurity="@drawable/ic_warning"
+            app:drawableScan="@drawable/ic_scanning"
+            app:drawableSearch="@drawable/ic_search"
+            app:drawableSecurity="@drawable/ic_security"
+            app:layout_scrollFlags="scroll|enterAlways|snap" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <!--<android.support.v4.widget.NestedScrollView-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="match_parent"-->
+    <!--app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior">-->
+
+    <!--<TextView-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" />-->
+    <!--</android.support.v4.widget.NestedScrollView>-->
+
+    <LinearLayout
+        android:id="@+id/bottomSheetMenu"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Name"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addressBarView" />
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/bottom_navigator_height"
+        app:behavior_hideable="false"
+        app:behavior_peekHeight="0.01dp"
+        app:layout_behavior="@string/my_bottom_sheet_behavior">
+
+        <include layout="@layout/view_menu_content" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/bottomTabsMenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/bottom_navigator_height"
+        app:behavior_hideable="false"
+        app:behavior_peekHeight="0.01dp"
+        app:layout_behavior="@string/my_bottom_sheet_behavior">
+
+        <include layout="@layout/view_menu_content" />
+    </LinearLayout>
 
     <com.github.leondevlifelog.browser.view.BottomNavigatorBar
+        android:id="@+id/bottomNavigator"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent" />
-</android.support.constraint.ConstraintLayout>
+        android:layout_gravity="bottom"
+        app:layout_behavior="com.github.leondevlifelog.browser.BottomNavigationViewBehavior" />
+
+</android.support.design.widget.CoordinatorLayout>

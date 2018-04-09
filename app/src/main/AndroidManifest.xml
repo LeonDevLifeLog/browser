@@ -46,7 +46,9 @@
         </activity>
         <!-- endregion -->
         <activity android:name=".SecondActivity" />
-        <activity android:name=".ui.TestActivity">
+        <activity
+            android:name=".ui.TestActivity"
+            android:windowSoftInputMode="adjustNothing">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

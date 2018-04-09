@@ -1,21 +1,47 @@
 package com.github.leondevlifelog.browser.ui
 
 import android.os.Bundle
+import android.support.design.widget.AppBarLayout
+import android.support.design.widget.BottomSheetBehavior
+import android.support.design.widget.CoordinatorLayout
 import android.support.v7.app.AppCompatActivity
+import android.view.KeyEvent
 import android.view.View
+import android.widget.LinearLayout
 import com.github.leondevlifelog.browser.R
 import com.github.leondevlifelog.browser.view.AddressBarView
-import com.github.leondevlifelog.browser.view.MenuPopupWindow
-import com.labo.kaji.relativepopupwindow.RelativePopupWindow
+import com.just.agentweb.AgentWeb
+import com.just.agentweb.NestedScrollAgentWebView
+import com.jyuesong.android.kotlin.extract._toast
 import kotlinx.android.synthetic.main.activity_test.*
 import kotlinx.android.synthetic.main.bottpm_navigator_bar.*
-
+import java.util.regex.Pattern
+import java.util.regex.PatternSyntaxException
 
 class TestActivity : AppCompatActivity() {
-    val TAG: String = "TestActivity"
+    private val TAG: String = "TestActivity"
+    private var bottomMenuSheetBehavior: BottomSheetBehavior<LinearLayout>? = null
+    private var bottomTabsSheetBehavior: BottomSheetBehavior<LinearLayout>? = null
+
+    private lateinit var mAgentWeb: AgentWeb
+
+    private lateinit var webView: NestedScrollAgentWebView
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_test)
+        webView = NestedScrollAgentWebView(this)
+
+        val lp = CoordinatorLayout.LayoutParams(-1, -1)
+        lp.behavior = AppBarLayout.ScrollingViewBehavior()
+
+        mAgentWeb = AgentWeb.with(this)
+                .setAgentWebParent(textContent, 1, lp)//lp记得设置behavior属性
+                .useDefaultIndicator()
+                .setWebView(webView)
+                .createAgentWeb()
+                .ready()
+                .go("https://m.baidu.com/")
         addressBarView.onActionButtonClickListener = object : AddressBarView.OnActionButtonClickListener {
             override fun onSecurityBtnClick(v: View) {
             }
@@ -27,26 +53,65 @@ class TestActivity : AppCompatActivity() {
             }
 
             override fun onInputDone(urlOrKeyWord: String) {
+                if (isUrl(urlOrKeyWord)) {
+                    mAgentWeb.urlLoader.loadUrl(urlOrKeyWord)
+                } else {
+                    mAgentWeb.urlLoader.loadUrl("https://m.baidu.com/s?&wd=$urlOrKeyWord")
+                }
             }
 
             override fun onScanBtnClick(v: View) {
             }
         }
-        var relativePopupWindow = MenuPopupWindow(this)
+        bottomMenuSheetBehavior = BottomSheetBehavior.from(bottomSheetMenu)
+        bottomTabsSheetBehavior = BottomSheetBehavior.from(bottomTabsMenu)
         actionMenu.setOnClickListener({ v ->
-            if (!relativePopupWindow.isShowing)
-                relativePopupWindow.showOnAnchor(v, RelativePopupWindow.VerticalPosition.ALIGN_BOTTOM,
-                        RelativePopupWindow.HorizontalPosition.ALIGN_LEFT)
+            if (bottomMenuSheetBehavior?.state == BottomSheetBehavior.STATE_COLLAPSED)
+                bottomMenuSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
             else
-                relativePopupWindow.dismiss()
+                bottomMenuSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
         })
         actionTabs.setOnClickListener({ v ->
-            if (!relativePopupWindow.isShowing)
-                relativePopupWindow.showOnAnchor(v, RelativePopupWindow.VerticalPosition.ALIGN_BOTTOM,
-                        RelativePopupWindow.HorizontalPosition.ALIGN_LEFT)
+            if (bottomTabsSheetBehavior?.state == BottomSheetBehavior.STATE_COLLAPSED)
+                bottomTabsSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
             else
-                relativePopupWindow.dismiss()
+                bottomTabsSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
+        })
+        actionHome.setOnClickListener({ _ ->
+            mAgentWeb.urlLoader.loadUrl("https://m.baidu.com")
+        })
+        actionForward.setOnClickListener({
+            if (mAgentWeb.webCreator.webView.canGoBack()) {
+                mAgentWeb.webCreator.webView.goBack()
+            } else {
+                _toast("不能后退了")
+            }
+        })
+        actionBack.setOnClickListener({
+            if (mAgentWeb.webCreator.webView.canGoForward()) {
+                mAgentWeb.webCreator.webView.goForward()
+            } else {
+                _toast("不能前进了")
+            }
         })
     }
 
+    override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
+        if (mAgentWeb.handleKeyEvent(keyCode, event)) {
+            return true
+        }
+        return super.onKeyDown(keyCode, event)
+    }
+
+    /**
+     * 判断字串是不是url链接
+     *@param str url字符串
+     */
+    @Throws(PatternSyntaxException::class)
+    fun isUrl(str: String): Boolean {
+        val regExp = "\\b((https?|ftp):\\/\\/)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[A-Za-z]{2,6}\\b(\\/[-a-zA-Z0-9@:%_\\+.~#?&//=]*)*(?:\\/|\\b)"
+        val p = Pattern.compile(regExp)
+        val m = p.matcher(str)
+        return m.matches()
+    }
 }
