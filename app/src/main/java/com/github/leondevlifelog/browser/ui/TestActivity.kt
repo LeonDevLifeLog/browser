@@ -81,17 +81,17 @@ class TestActivity : AppCompatActivity() {
             mAgentWeb.urlLoader.loadUrl("https://m.baidu.com")
         })
         actionForward.setOnClickListener({
-            if (mAgentWeb.webCreator.webView.canGoBack()) {
-                mAgentWeb.webCreator.webView.goBack()
-            } else {
-                _toast("不能后退了")
-            }
-        })
-        actionBack.setOnClickListener({
             if (mAgentWeb.webCreator.webView.canGoForward()) {
                 mAgentWeb.webCreator.webView.goForward()
             } else {
                 _toast("不能前进了")
+            }
+        })
+        actionBack.setOnClickListener({
+            if (mAgentWeb.webCreator.webView.canGoBack()) {
+                mAgentWeb.webCreator.webView.goBack()
+            } else {
+                _toast("不能后退了")
             }
         })
     }
@@ -109,7 +109,7 @@ class TestActivity : AppCompatActivity() {
      */
     @Throws(PatternSyntaxException::class)
     fun isUrl(str: String): Boolean {
-        val regExp = "\\b((https?|ftp):\\/\\/)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[A-Za-z]{2,6}\\b(\\/[-a-zA-Z0-9@:%_\\+.~#?&//=]*)*(?:\\/|\\b)"
+        val regExp = "\\b((https?|http):\\/\\/)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[A-Za-z]{2,6}\\b(\\/[-a-zA-Z0-9@:%_\\+.~#?&//=]*)*(?:\\/|\\b)"
         val p = Pattern.compile(regExp)
         val m = p.matcher(str)
         return m.matches()
