@@ -27,17 +27,6 @@
 
     </android.support.design.widget.AppBarLayout>
 
-    <!--<android.support.v4.widget.NestedScrollView-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--app:layout_behavior="android.support.design.widget.AppBarLayout$ScrollingViewBehavior">-->
-
-    <!--<TextView-->
-    <!--android:layout_width="wrap_content"-->
-    <!--android:layout_height="wrap_content"-->
-    <!--android:text="\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n" />-->
-    <!--</android.support.v4.widget.NestedScrollView>-->
-
     <LinearLayout
         android:id="@+id/bottomSheetMenu"
         android:layout_width="match_parent"
@@ -61,7 +50,7 @@
         app:behavior_peekHeight="0.01dp"
         app:layout_behavior="@string/my_bottom_sheet_behavior">
 
-        <include layout="@layout/view_menu_content" />
+        <include layout="@layout/view_tabs_content" />
     </LinearLayout>
 
     <com.github.leondevlifelog.browser.view.BottomNavigatorBar

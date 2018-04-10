@@ -5,16 +5,19 @@ import android.support.design.widget.AppBarLayout
 import android.support.design.widget.BottomSheetBehavior
 import android.support.design.widget.CoordinatorLayout
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.LinearLayoutManager
 import android.view.KeyEvent
 import android.view.View
 import android.widget.LinearLayout
 import com.github.leondevlifelog.browser.R
+import com.github.leondevlifelog.browser.TabsAdapter
 import com.github.leondevlifelog.browser.view.AddressBarView
 import com.just.agentweb.AgentWeb
 import com.just.agentweb.NestedScrollAgentWebView
 import com.jyuesong.android.kotlin.extract._toast
 import kotlinx.android.synthetic.main.activity_test.*
 import kotlinx.android.synthetic.main.bottpm_navigator_bar.*
+import kotlinx.android.synthetic.main.view_tabs_content.*
 import java.util.regex.Pattern
 import java.util.regex.PatternSyntaxException
 
@@ -65,19 +68,19 @@ class TestActivity : AppCompatActivity() {
         }
         bottomMenuSheetBehavior = BottomSheetBehavior.from(bottomSheetMenu)
         bottomTabsSheetBehavior = BottomSheetBehavior.from(bottomTabsMenu)
-        actionMenu.setOnClickListener({ v ->
+        actionMenu.setOnClickListener({
             if (bottomMenuSheetBehavior?.state == BottomSheetBehavior.STATE_COLLAPSED)
                 bottomMenuSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
             else
                 bottomMenuSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
         })
-        actionTabs.setOnClickListener({ v ->
+        actionTabs.setOnClickListener({
             if (bottomTabsSheetBehavior?.state == BottomSheetBehavior.STATE_COLLAPSED)
                 bottomTabsSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
             else
                 bottomTabsSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
         })
-        actionHome.setOnClickListener({ _ ->
+        actionHome.setOnClickListener({
             mAgentWeb.urlLoader.loadUrl("https://m.baidu.com")
         })
         actionForward.setOnClickListener({
@@ -94,6 +97,8 @@ class TestActivity : AppCompatActivity() {
                 _toast("不能后退了")
             }
         })
+        rvTabsList.layoutManager = LinearLayoutManager(this)
+        rvTabsList.adapter = TabsAdapter(this)
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
@@ -113,5 +118,20 @@ class TestActivity : AppCompatActivity() {
         val p = Pattern.compile(regExp)
         val m = p.matcher(str)
         return m.matches()
+    }
+
+    override fun onPause() {
+        mAgentWeb.webLifeCycle.onPause()
+        super.onPause()
+    }
+
+    override fun onResume() {
+        mAgentWeb.webLifeCycle.onResume()
+        super.onResume()
+    }
+
+    override fun onDestroy() {
+        mAgentWeb.webLifeCycle.onDestroy()
+        super.onDestroy()
     }
 }
