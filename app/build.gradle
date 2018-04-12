@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
-
+apply plugin: 'kotlin-kapt'
 android {
     compileSdkVersion 27
     defaultConfig {
@@ -36,6 +36,11 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    kapt {
+        arguments {
+            arg("mezzanine.projectPath", project.rootDir)
+        }
+    }
 }
 
 dependencies {
@@ -56,4 +61,8 @@ dependencies {
     implementation 'com.just.agentweb:agentweb:4.0.2'
     implementation 'com.just.agentweb:download:4.0.2'
     implementation 'com.just.agentweb:filechooser:4.0.2'
+    implementation 'org.jsoup:jsoup:1.11.2'
+    def mezzanineVersion = '1.1.1'
+    implementation "com.anthonycr.mezzanine:mezzanine:$mezzanineVersion"
+    kapt "com.anthonycr.mezzanine:mezzanine-compiler:$mezzanineVersion"
 }

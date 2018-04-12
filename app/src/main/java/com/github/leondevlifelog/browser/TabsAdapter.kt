@@ -5,6 +5,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 
 class TabsAdapter(val context: Context) : RecyclerView.Adapter<TabsAdapter.ViewHolder>() {
@@ -21,13 +22,19 @@ class TabsAdapter(val context: Context) : RecyclerView.Adapter<TabsAdapter.ViewH
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.webTitle?.text = str[position]
+        holder.actionCloseTab?.setOnClickListener({
+            str.removeAt(position)
+            notifyDataSetChanged()
+        })
     }
 
     class ViewHolder : RecyclerView.ViewHolder {
         var webTitle: TextView?
+        var actionCloseTab: ImageView?
 
         constructor(itemView: View?) : super(itemView) {
-            webTitle = itemView?.findViewById<TextView>(R.id.webTitle)
+            webTitle = itemView?.findViewById(R.id.webTitle)
+            actionCloseTab = itemView?.findViewById(R.id.actionCloseTab)
         }
     }
 }

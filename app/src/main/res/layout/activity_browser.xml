@@ -5,7 +5,7 @@
     android:id="@+id/textContent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.github.leondevlifelog.browser.ui.TestActivity">
+    tools:context="com.github.leondevlifelog.browser.ui.BrowserActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"

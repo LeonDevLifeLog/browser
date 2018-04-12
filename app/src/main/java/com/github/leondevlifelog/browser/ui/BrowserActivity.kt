@@ -1,5 +1,6 @@
 package com.github.leondevlifelog.browser.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.BottomSheetBehavior
@@ -15,14 +16,15 @@ import com.github.leondevlifelog.browser.view.AddressBarView
 import com.just.agentweb.AgentWeb
 import com.just.agentweb.NestedScrollAgentWebView
 import com.jyuesong.android.kotlin.extract._toast
-import kotlinx.android.synthetic.main.activity_test.*
+import kotlinx.android.synthetic.main.activity_browser.*
 import kotlinx.android.synthetic.main.bottpm_navigator_bar.*
+import kotlinx.android.synthetic.main.view_menu_content.*
 import kotlinx.android.synthetic.main.view_tabs_content.*
 import java.util.regex.Pattern
 import java.util.regex.PatternSyntaxException
 
-class TestActivity : AppCompatActivity() {
-    private val TAG: String = "TestActivity"
+class BrowserActivity : AppCompatActivity() {
+    private val TAG: String = "BrowserActivity"
     private var bottomMenuSheetBehavior: BottomSheetBehavior<LinearLayout>? = null
     private var bottomTabsSheetBehavior: BottomSheetBehavior<LinearLayout>? = null
 
@@ -32,7 +34,7 @@ class TestActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_test)
+        setContentView(R.layout.activity_browser)
         webView = NestedScrollAgentWebView(this)
 
         val lp = CoordinatorLayout.LayoutParams(-1, -1)
@@ -99,6 +101,13 @@ class TestActivity : AppCompatActivity() {
         })
         rvTabsList.layoutManager = LinearLayoutManager(this)
         rvTabsList.adapter = TabsAdapter(this)
+
+        actionMenuSettings.setOnClickListener {
+            startActivity(Intent(this, SettingsActivity::class.java))
+        }
+        actionMenuExit.setOnClickListener {
+            android.os.Process.killProcess(android.os.Process.myPid())
+        }
     }
 
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {

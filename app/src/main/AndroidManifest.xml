@@ -23,6 +23,7 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -33,7 +34,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ui.TestActivity"
+            android:name=".ui.BrowserActivity"
             android:configChanges="orientation|screenSize"
             android:hardwareAccelerated="true"
             android:windowSoftInputMode="adjustNothing">
@@ -46,10 +47,10 @@
         <activity
             android:name=".ui.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".ui.TestActivity">
+            android:parentActivityName=".ui.BrowserActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.github.leondevlifelog.browser.ui.TestActivity" />
+                android:value="com.github.leondevlifelog.browser.ui.BrowserActivity" />
         </activity>
     </application>
 
