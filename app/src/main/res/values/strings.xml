@@ -76,4 +76,7 @@
 
     <string name="pref_title_vibrate">Vibrate</string>
     <string name="my_bottom_sheet_behavior">com.github.leondevlifelog.browser.AutoCloseBottomSheetBehavior</string>
+    <string name="url_home">browser://home</string>
+    <string name="title_home">首页</string>
+    <string name="browser_scheme">browser</string>
 </resources>

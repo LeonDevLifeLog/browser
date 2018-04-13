@@ -39,5 +39,6 @@
         android:background="?android:selectableItemBackgroundBorderless"
         android:clickable="true"
         android:focusable="true"
+        android:padding="8dp"
         app:srcCompat="@drawable/ic_clear" />
 </LinearLayout>

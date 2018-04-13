@@ -7,24 +7,23 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import com.github.leondevlifelog.browser.bean.TabInfo
 
-class TabsAdapter(val context: Context) : RecyclerView.Adapter<TabsAdapter.ViewHolder>() {
-
-    var str = mutableListOf("百度网", "腾讯网", "淘宝网")
+class TabsAdapter(val context: Context, var tabs: MutableList<TabInfo>) : RecyclerView.Adapter<TabsAdapter.ViewHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         var view = LayoutInflater.from(context).inflate(R.layout.item_tabs_content, parent, false)
         return ViewHolder(view)
     }
 
     override fun getItemCount(): Int {
-        return str.size
+        return tabs.size
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.webTitle?.text = str[position]
+        holder.webTitle?.text = tabs[position].title
         holder.actionCloseTab?.setOnClickListener({
-            str.removeAt(position)
-            notifyDataSetChanged()
+            tabs.removeAt(position)
+            notifyItemRemoved(position)
         })
     }
 

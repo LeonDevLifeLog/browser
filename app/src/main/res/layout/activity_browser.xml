@@ -50,6 +50,8 @@
         app:behavior_peekHeight="0.01dp"
         app:layout_behavior="@string/my_bottom_sheet_behavior">
 
+        <requestFocus />
+
         <include layout="@layout/view_tabs_content" />
     </LinearLayout>
 

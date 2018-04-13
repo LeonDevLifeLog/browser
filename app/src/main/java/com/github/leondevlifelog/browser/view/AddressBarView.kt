@@ -171,4 +171,7 @@ class AddressBarView : FrameLayout {
         a.recycle()
     }
 
+    fun setUrl(url: String?): Unit {
+        urlInputBox.setText(url)
+    }
 }
