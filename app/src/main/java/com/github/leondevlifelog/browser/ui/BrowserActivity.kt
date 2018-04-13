@@ -1,20 +1,23 @@
 package com.github.leondevlifelog.browser.ui
 
 import android.app.Activity
-import android.arch.lifecycle.MutableLiveData
 import android.content.Intent
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.BottomSheetBehavior
 import android.support.design.widget.CoordinatorLayout
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.DefaultItemAnimator
 import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
+import android.support.v7.widget.helper.ItemTouchHelper
 import android.view.KeyEvent
 import android.view.View
+import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.LinearLayout
+import com.github.leondevlifelog.browser.ObversableTabsInfo
 import com.github.leondevlifelog.browser.R
 import com.github.leondevlifelog.browser.TabsAdapter
 import com.github.leondevlifelog.browser.bean.TabInfo
@@ -22,45 +25,56 @@ import com.github.leondevlifelog.browser.view.AddressBarView
 import com.just.agentweb.AgentWeb
 import com.just.agentweb.NestedScrollAgentWebView
 import com.jyuesong.android.kotlin.extract._toast
+import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator
 import kotlinx.android.synthetic.main.activity_browser.*
 import kotlinx.android.synthetic.main.bottpm_navigator_bar.*
 import kotlinx.android.synthetic.main.view_menu_content.*
 import kotlinx.android.synthetic.main.view_tabs_content.*
+import java.util.*
 import java.util.regex.Pattern
 import java.util.regex.PatternSyntaxException
+import kotlin.concurrent.schedule
 
 class BrowserActivity : AppCompatActivity() {
     private val TAG: String = "BrowserActivity"
     private var bottomMenuSheetBehavior: BottomSheetBehavior<LinearLayout>? = null
     private var bottomTabsSheetBehavior: BottomSheetBehavior<LinearLayout>? = null
-    private lateinit var tabs: MutableList<TabInfo>
+    private lateinit var tabs: ObversableTabsInfo
     private lateinit var mAgentWeb: AgentWeb
 
     private lateinit var webView: NestedScrollAgentWebView
 
     private lateinit var tabsAdapter: TabsAdapter
 
-    private lateinit var mutableLiveData: MutableLiveData<MutableList<TabInfo>>
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_browser)
         webView = NestedScrollAgentWebView(this)
         val lp = CoordinatorLayout.LayoutParams(-1, -1)
-        lp.behavior = AppBarLayout.ScrollingViewBehavior()
+        var scrollingViewBehavior = AppBarLayout.ScrollingViewBehavior()
+        lp.behavior = scrollingViewBehavior
         mAgentWeb = AgentWeb.with(this)
                 .setAgentWebParent(textContent, 1, lp)//lp记得设置behavior属性
                 .useDefaultIndicator()
                 .setWebView(webView)
+                .setWebChromeClient(object : WebChromeClient() {
+
+                    override fun onReceivedTitle(view: WebView?, title: String?) {
+                        tabs.selectedTab?.title = title.toString()
+                        tabsAdapter.notifyDataSetChanged()
+                        super.onReceivedTitle(view, title)
+                    }
+                })
                 .setWebViewClient(object : WebViewClient() {
-                    override fun onPageFinished(view: WebView?, url: String?) {
+                    override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+                        tabs.selectedTab?.url = url.toString()
                         addressBarView.setUrl(url)
-                        super.onPageFinished(view, url)
+                        super.onPageStarted(view, url, favicon)
                     }
                 })
                 .createAgentWeb()
                 .ready()
-                .go("https://m.baidu.com/")
+                .go("file:///android_asset/index.html")
         mAgentWeb.webCreator.webView.requestFocus()
         addressBarView.onActionButtonClickListener = object : AddressBarView.OnActionButtonClickListener {
             override fun onSecurityBtnClick(v: View) {
@@ -96,7 +110,7 @@ class BrowserActivity : AppCompatActivity() {
                 bottomTabsSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
         })
         actionHome.setOnClickListener({
-            mAgentWeb.urlLoader.loadUrl("https://m.baidu.com")
+            mAgentWeb.urlLoader.loadUrl("file:///android_asset/index.html")
         })
         actionForward.setOnClickListener({
             if (mAgentWeb.webCreator.webView.canGoForward()) {
@@ -112,12 +126,44 @@ class BrowserActivity : AppCompatActivity() {
                 _toast("不能后退了")
             }
         })
-        tabs = mutableListOf(TabInfo(getString(R.string.title_home), getString(R.string.url_home)))
+        tabs = ObversableTabsInfo()
+        tabs.addObserver { o, arg ->
+            when (arg) {
+                is Int -> {
+                    actionTabsNum.text = arg.toString()
+                    tabsAdapter.notifyItemInserted(arg - 1)
+                }
+                is TabInfo -> tabsAdapter.notifyDataSetChanged()
+            }
+        }
         tabsAdapter = TabsAdapter(this, tabs)
-        rvTabsList.layoutManager = LinearLayoutManager(this)
-        rvTabsList.itemAnimator = DefaultItemAnimator()
-        rvTabsList.adapter = tabsAdapter
+        tabsAdapter.addOnSelectedTabChangedListner(object : TabsAdapter.EventLintener {
+            override fun onClosed(v: View, tab: TabInfo) {
+            }
 
+            override fun onSelectedChanged(tab: TabInfo) {
+                mAgentWeb.urlLoader.loadUrl(tab.url)
+                delayCloseTabsContent()
+            }
+        })
+
+        var linearLayoutManager = LinearLayoutManager(this)
+        linearLayoutManager.stackFromEnd = true
+        rvTabsList.layoutManager = linearLayoutManager
+        rvTabsList.adapter = tabsAdapter
+        rvTabsList.itemAnimator = SlideInLeftAnimator()
+        var simpleItemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+            override fun onMove(recyclerView: RecyclerView?, viewHolder: RecyclerView.ViewHolder?, target: RecyclerView.ViewHolder?): Boolean {
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder?, direction: Int) {
+                tabs.remove(tabs.get(viewHolder?.adapterPosition!!))
+                tabs.selectedTab = tabs.get(0)
+                tabsAdapter.notifyDataSetChanged()
+            }
+        })
+        simpleItemTouchHelper.attachToRecyclerView(rvTabsList)
         actionMenuSettings.setOnClickListener {
             startActivity(Intent(this, SettingsActivity::class.java))
         }
@@ -125,9 +171,23 @@ class BrowserActivity : AppCompatActivity() {
             android.os.Process.killProcess(android.os.Process.myPid())
         }
         actionNewTab.setOnClickListener {
-            tabs.add(TabInfo(getString(R.string.title_home), getString(R.string.url_home)))
-            tabsAdapter.notifyItemInserted(tabs.size - 1)
-            rvTabsList.scrollToPosition(tabs.size - 1)
+            var x = TabInfo()
+            tabs.add(x)
+            tabs.selectedTab = x
+            mAgentWeb.urlLoader.loadUrl(x.url)
+            rvTabsList.scrollToPosition(tabs.size() - 1)
+            delayCloseTabsContent()
+        }
+        actionCloseAllTabs.setOnClickListener {
+            tabs.clear()
+            tabsAdapter.notifyDataSetChanged()
+            delayCloseTabsContent()
+        }
+    }
+
+    private fun delayCloseTabsContent() {
+        Timer("closetab", false).schedule(500) {
+            bottomTabsSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
         }
     }
 
