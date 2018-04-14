@@ -13,7 +13,7 @@ import com.github.leondevlifelog.browser.bean.TabInfo
 class TabsAdapter(val context: Context, var tabs: ObversableTabsInfo) : RecyclerView.Adapter<TabsAdapter.ViewHolder>() {
     interface EventLintener {
         fun onSelectedChanged(tab: TabInfo)
-        fun onClosed(v: View, tab: TabInfo)
+        fun onClosed(v: View, tab: TabInfo?)
     }
 
     private var eventListeners = mutableListOf<EventLintener>()
@@ -54,7 +54,7 @@ class TabsAdapter(val context: Context, var tabs: ObversableTabsInfo) : Recycler
             else tabs.selectedTab = tabs.get(0)
             notifyItemRemoved(position)
             eventListeners.forEach {
-                it.onClosed(v, tab)
+                it.onClosed(v, tabs.selectedTab)
             }
         })
     }

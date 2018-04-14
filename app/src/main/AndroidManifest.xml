@@ -24,7 +24,6 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
 
-
     <application
         android:name=".App"
         android:allowBackup="true"
@@ -48,12 +47,18 @@
         <activity
             android:name=".ui.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".ui.BrowserActivity">
+            android:parentActivityName=".ui.BrowserActivity"
+            android:theme="@style/AppTheme.Settings">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.github.leondevlifelog.browser.ui.BrowserActivity" />
         </activity>
         <activity android:name=".ui.ScanActivity" />
+        <activity android:name=".ui.HistoryActivity" />
+        <activity android:name=".ui.BookmarkActivity" />
+        <activity
+            android:name=".setting.NewSettingsActivity"
+            android:label="@string/title_activity_new_settings"></activity>
     </application>
 
 </manifest>

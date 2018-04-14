@@ -138,7 +138,8 @@ class BrowserActivity : AppCompatActivity() {
         }
         tabsAdapter = TabsAdapter(this, tabs)
         tabsAdapter.addOnSelectedTabChangedListner(object : TabsAdapter.EventLintener {
-            override fun onClosed(v: View, tab: TabInfo) {
+            override fun onClosed(v: View, tab: TabInfo?) {
+                mAgentWeb.urlLoader.loadUrl(tab?.url)
             }
 
             override fun onSelectedChanged(tab: TabInfo) {

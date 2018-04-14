@@ -8,7 +8,7 @@
 
     <!-- Example General settings -->
     <string name="pref_header_general">General</string>
-
+    <string name="pref_header_user">用户</string>
     <string name="pref_title_social_recommendations">Enable social recommendations</string>
     <string name="pref_description_social_recommendations">Recommendations for people to contact
         based on your message history
@@ -79,4 +79,8 @@
     <string name="url_home">browser://home</string>
     <string name="title_home">首页</string>
     <string name="browser_scheme">browser</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_new_settings">MySettings</string>
 </resources>
