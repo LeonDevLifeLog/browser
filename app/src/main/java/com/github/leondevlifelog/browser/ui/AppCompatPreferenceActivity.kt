@@ -22,7 +22,6 @@ abstract class AppCompatPreferenceActivity : PreferenceActivity() {
         delegate.installViewFactory()
         delegate.onCreate(savedInstanceState)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_setting)
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
