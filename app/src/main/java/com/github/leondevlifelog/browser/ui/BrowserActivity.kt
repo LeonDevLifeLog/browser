@@ -22,8 +22,9 @@ import com.github.leondevlifelog.browser.R
 import com.github.leondevlifelog.browser.TabsAdapter
 import com.github.leondevlifelog.browser.bean.TabInfo
 import com.github.leondevlifelog.browser.view.AddressBarView
+import com.github.leondevlifelog.browser.view.MyWebView
 import com.just.agentweb.AgentWeb
-import com.just.agentweb.NestedScrollAgentWebView
+import com.jyuesong.android.kotlin.extract._dip2px
 import com.jyuesong.android.kotlin.extract._toast
 import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator
 import kotlinx.android.synthetic.main.activity_browser.*
@@ -42,40 +43,15 @@ class BrowserActivity : AppCompatActivity() {
     private lateinit var tabs: ObversableTabsInfo
     private lateinit var mAgentWeb: AgentWeb
 
-    private lateinit var webView: NestedScrollAgentWebView
+    private lateinit var webView: MyWebView
 
     private lateinit var tabsAdapter: TabsAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_browser)
-        webView = NestedScrollAgentWebView(this)
-        val lp = CoordinatorLayout.LayoutParams(-1, -1)
-        var scrollingViewBehavior = AppBarLayout.ScrollingViewBehavior()
-        lp.behavior = scrollingViewBehavior
-        mAgentWeb = AgentWeb.with(this)
-                .setAgentWebParent(textContent, 1, lp)//lp记得设置behavior属性
-                .useDefaultIndicator()
-                .setWebView(webView)
-                .setWebChromeClient(object : WebChromeClient() {
-
-                    override fun onReceivedTitle(view: WebView?, title: String?) {
-                        tabs.selectedTab?.title = title.toString()
-                        tabsAdapter.notifyDataSetChanged()
-                        super.onReceivedTitle(view, title)
-                    }
-                })
-                .setWebViewClient(object : WebViewClient() {
-                    override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
-                        tabs.selectedTab?.url = url.toString()
-                        addressBarView.setUrl(url)
-                        super.onPageStarted(view, url, favicon)
-                    }
-                })
-                .createAgentWeb()
-                .ready()
-                .go("file:///android_asset/index.html")
-        mAgentWeb.webCreator.webView.requestFocus()
+        initWebView()
+        initSwipeRefresh()
         addressBarView.onActionButtonClickListener = object : AddressBarView.OnActionButtonClickListener {
             override fun onSecurityBtnClick(v: View) {
             }
@@ -186,6 +162,69 @@ class BrowserActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * 初始化下拉刷新
+     */
+    private fun initSwipeRefresh() {
+        srlMain.setOnRefreshListener {
+            mAgentWeb.urlLoader.reload()
+        }
+        srlMain.setProgressViewOffset(false, _dip2px(52), _dip2px(120))
+        srlMain.setColorSchemeResources(android.R.color.holo_blue_bright, android.R.color.holo_green_light, android.R.color.holo_orange_light, android.R.color.holo_red_light)
+        srlMain.setDistanceToTriggerSync(_dip2px(120))
+    }
+
+    /**
+     * 初始化webview
+     */
+    private fun initWebView() {
+        webView = MyWebView(this)
+        val lp = CoordinatorLayout.LayoutParams(-1, -1)
+        var scrollingViewBehavior = AppBarLayout.ScrollingViewBehavior()
+        lp.behavior = scrollingViewBehavior
+        mAgentWeb = AgentWeb.with(this)
+                .setAgentWebParent(textContent, 1, lp)//lp记得设置behavior属性
+                .useDefaultIndicator()
+                .setWebView(webView)
+                .setWebChromeClient(object : WebChromeClient() {
+
+                    override fun onReceivedTitle(view: WebView?, title: String?) {
+                        tabs.selectedTab?.title = title.toString()
+                        tabsAdapter.notifyDataSetChanged()
+                        super.onReceivedTitle(view, title)
+                        srlMain.isRefreshing = false
+                    }
+                })
+                .setWebViewClient(object : WebViewClient() {
+                    override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+                        tabs.selectedTab?.url = url.toString()
+                        addressBarView.setUrl(url)
+                        super.onPageStarted(view, url, favicon)
+                    }
+                })
+                .createAgentWeb()
+                .ready()
+                .go("file:///android_asset/index.html")
+        webView.changeListener = object : MyWebView.OnScrollChangeListener {
+            //滑动webView时确定下拉刷新是否可以使用
+            override fun onPageEnd(l: Int, t: Int, oldl: Int, oldt: Int) {
+                srlMain.isEnabled = false
+            }
+
+            override fun onPageTop(l: Int, t: Int, oldl: Int, oldt: Int) {
+                srlMain.isEnabled = true
+            }
+
+            override fun onScrollChanged(l: Int, t: Int, oldl: Int, oldt: Int) {
+                srlMain.isEnabled = false
+            }
+
+        }
+    }
+
+    /**
+     * 延时关闭tabs面板
+     */
     private fun delayCloseTabsContent() {
         Timer("closetab", false).schedule(500) {
             bottomTabsSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
