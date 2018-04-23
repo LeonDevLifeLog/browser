@@ -8,7 +8,9 @@ class AppDatabaseImpl {
     companion object {
         val instance: AppDatabase by lazy {
             Room.databaseBuilder(App.instance,
-                    AppDatabase::class.java, "database").build()
+                    AppDatabase::class.java, "database")
+                    .fallbackToDestructiveMigration()
+                    .build()
         }
     }
 }

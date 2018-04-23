@@ -7,4 +7,10 @@
         android:icon="@drawable/ic_info_black_24dp"
         android:title="@string/pref_header_user" />
 
+    <header
+        android:fragment="com.github.leondevlifelog.browser.ui.fragments.SettingsFragment"
+        android:icon="@drawable/ic_info_black_24dp"
+        android:title="@string/pref_header_browser" />
+
+
 </preference-headers>

@@ -6,5 +6,5 @@ import android.arch.persistence.room.PrimaryKey
 import java.util.*
 
 @Entity
-data class BookMark(@PrimaryKey var id: Int, @ColumnInfo var title: String,
+data class BookMark(@PrimaryKey(autoGenerate = true) var id: Int = 0, @ColumnInfo var title: String,
                     @ColumnInfo var url: String, @ColumnInfo var time: Date)

@@ -3,6 +3,7 @@ package com.github.leondevlifelog.browser.ui
 import android.app.Activity
 import android.content.Intent
 import android.graphics.Bitmap
+import android.os.AsyncTask
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.BottomSheetBehavior
@@ -23,6 +24,8 @@ import com.github.leondevlifelog.browser.ObversableTabsInfo
 import com.github.leondevlifelog.browser.R
 import com.github.leondevlifelog.browser.TabsAdapter
 import com.github.leondevlifelog.browser.bean.TabInfo
+import com.github.leondevlifelog.browser.database.AppDatabaseImpl
+import com.github.leondevlifelog.browser.database.entities.History
 import com.github.leondevlifelog.browser.view.AddressBarView
 import com.github.leondevlifelog.browser.view.MyWebView
 import com.just.agentweb.AgentWeb
@@ -236,9 +239,15 @@ class BrowserActivity : AppCompatActivity() {
 
                     override fun onReceivedTitle(view: WebView?, title: String?) {
                         tabs.selectedTab?.title = title.toString()
+                        var url = mAgentWeb.webCreator.webView.url.toString()
                         tabsAdapter.notifyDataSetChanged()
                         super.onReceivedTitle(view, title)
                         srlMain.isRefreshing = false
+                        if ("file:///android_asset/index.html" != url)
+                            AsyncTask.execute({
+                                AppDatabaseImpl.instance.historyDao()
+                                        .insert(History(title = title.toString(), url = url, time = Date()))
+                            })
                     }
                 })
                 .setWebViewClient(object : WebViewClient() {

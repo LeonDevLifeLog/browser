@@ -2,14 +2,15 @@ package com.github.leondevlifelog.browser.ui.fragments
 
 
 import android.os.Bundle
-import android.support.v14.preference.PreferenceFragment
+import android.preference.PreferenceFragment
 
 import com.github.leondevlifelog.browser.R
 
 
 class SettingsFragment : PreferenceFragment() {
-    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
 
-        addPreferencesFromResource(R.xml.pref_headers)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        addPreferencesFromResource(R.xml.pref_notification)
     }
 }
