@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.HistoryActivity">
+    tools:context=".ui.DownLoadActivity">
 
     <include layout="@layout/tolbar" />
 </android.support.constraint.ConstraintLayout>

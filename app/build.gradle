@@ -45,12 +45,12 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'cn.bingoogolapple:bga-qrcode-zxing:1.2.1'
+    implementation 'com.mylhyl:zxingscanner:2.1.1'
     implementation 'pub.devrel:easypermissions:1.2.0'
     implementation 'jp.wasabeef:recyclerview-animators:2.3.0'
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jre8:$kotlin_version"
     implementation 'com.android.support:appcompat-v7:27.1.1'
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.0'
     implementation 'com.android.support:support-v4:27.1.1'
     implementation 'com.github.jiang111:Kotlin-Extract:1.0.1'
     testImplementation 'junit:junit:4.12'
@@ -69,4 +69,24 @@ dependencies {
     def mezzanineVersion = '1.1.1'
     implementation "com.anthonycr.mezzanine:mezzanine:$mezzanineVersion"
     kapt "com.anthonycr.mezzanine:mezzanine-compiler:$mezzanineVersion"
+
+    // ViewModel and LiveData
+    implementation "android.arch.lifecycle:extensions:1.1.1"
+    // alternatively, just ViewModel
+    implementation "android.arch.lifecycle:viewmodel:1.1.1"
+    // alternatively, just LiveData
+    implementation "android.arch.lifecycle:livedata:1.1.1"
+
+    kapt "android.arch.lifecycle:compiler:1.1.1"
+
+    // Room (use 1.1.0-beta3 for latest beta)
+    implementation "android.arch.persistence.room:runtime:1.0.0"
+    kapt "android.arch.persistence.room:compiler:1.0.0"
+
+    // Paging
+    implementation "android.arch.paging:runtime:1.0.0-rc1"
+    implementation "android.arch.lifecycle:common-java8:1.1.1"
+
+    //下载
+    implementation 'cn.woblog.android:downloader:1.0.1'
 }

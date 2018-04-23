@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.github.leondevlifelog.browser">
 
     <!-- region x5浏览器权限 -->
@@ -23,6 +24,10 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:name=".App"
@@ -53,12 +58,18 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.github.leondevlifelog.browser.ui.BrowserActivity" />
         </activity>
-        <activity android:name=".ui.ScanActivity" />
+        <activity
+            android:name=".ui.ScanActivity"
+            android:theme="@style/AppTheme.ScanActivity" />
         <activity android:name=".ui.HistoryActivity" />
         <activity android:name=".ui.BookmarkActivity" />
-        <activity
-            android:name=".setting.NewSettingsActivity"
-            android:label="@string/title_activity_new_settings"></activity>
+        <activity android:name=".ui.DownLoadActivity" />
+
+        <service android:name="cn.woblog.android.downloader.DownloadService">
+            <intent-filter>
+                <action android:name="cn.woblog.android.downloader.DOWNLOAD_SERVICE" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

@@ -7,6 +7,8 @@ import android.os.Bundle
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.BottomSheetBehavior
 import android.support.design.widget.CoordinatorLayout
+import android.support.design.widget.TextInputEditText
+import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
@@ -150,8 +152,9 @@ class BrowserActivity : AppCompatActivity() {
         actionNewTab.setOnClickListener {
             var x = TabInfo()
             tabs.add(x)
+            if (tabs.selectedTab != x)
+                mAgentWeb.urlLoader.loadUrl(x.url)
             tabs.selectedTab = x
-            mAgentWeb.urlLoader.loadUrl(x.url)
             rvTabsList.scrollToPosition(tabs.size() - 1)
             delayCloseTabsContent()
         }
@@ -159,6 +162,49 @@ class BrowserActivity : AppCompatActivity() {
             tabs.clear()
             tabsAdapter.notifyDataSetChanged()
             delayCloseTabsContent()
+        }
+        actionMenuHistory.setOnClickListener {
+            startActivityForResult(Intent(this@BrowserActivity, HistoryActivity::class.java),
+                    HistoryActivity.REQUEST_HISTORY)
+        }
+        actionMenuBookmark.setOnClickListener {
+            startActivityForResult(Intent(this@BrowserActivity, BookmarkActivity::class.java),
+                    BookmarkActivity.REQUEST_BOOKMARK)
+        }
+        actionMenuShare.setOnClickListener {
+            var shareIntent = Intent()
+            //设置分享行为
+            shareIntent.action = Intent.ACTION_SEND
+            //设置分享内容的类型
+            shareIntent.type = "text/plain"
+            //添加分享内容标题
+            shareIntent.putExtra(Intent.EXTRA_SUBJECT, "我正在浏览一个干货满满的网站,你也看一看吧~")
+            //添加分享内容
+            shareIntent.putExtra(Intent.EXTRA_TEXT, "${tabs.selectedTab?.title}\n${tabs.selectedTab?.url}")
+            //创建分享的Dialog
+            shareIntent = Intent.createChooser(shareIntent, "分享至")
+            this@BrowserActivity.startActivity(shareIntent)
+        }
+        actionMenuDownload.setOnClickListener {
+            startActivity(Intent(this@BrowserActivity, DownLoadActivity::class.java))
+        }
+        actionMenuAddBookmark.setOnClickListener {
+
+            var dialogBuilder = AlertDialog.Builder(this@BrowserActivity)
+            var dialogView = layoutInflater.inflate(R.layout.dialog_add_bookmark, null)
+            var title = dialogView.findViewById<TextInputEditText>(R.id.dialogWebTitle)
+            title.setText(this@BrowserActivity.tabs.selectedTab?.title)
+            var url = dialogView.findViewById<TextInputEditText>(R.id.dialogWebUrl)
+            url.setText(this@BrowserActivity.tabs.selectedTab?.url)
+            dialogBuilder.setView(dialogView)
+            dialogBuilder.setTitle("保存书签")
+            dialogBuilder.setPositiveButton("保存", { dialog, which ->
+                //TODO("添加书签 保存到数据库")
+            })
+            dialogBuilder.setNegativeButton("取消", { dialog, which ->
+                dialog.dismiss()
+            })
+            dialogBuilder.show()
         }
     }
 
@@ -233,7 +279,8 @@ class BrowserActivity : AppCompatActivity() {
 
     private fun openUrlOrSearch(urlOrKeyWord: String?) {
         if (isUrl(urlOrKeyWord)) {
-            mAgentWeb.urlLoader.loadUrl(urlOrKeyWord)
+            if (!urlOrKeyWord?.startsWith("http")!! and !urlOrKeyWord.startsWith("https"))
+                mAgentWeb.urlLoader.loadUrl("http://$urlOrKeyWord")
         } else {
             mAgentWeb.urlLoader.loadUrl("https://m.baidu.com/s?&wd=$urlOrKeyWord")
         }
@@ -252,7 +299,7 @@ class BrowserActivity : AppCompatActivity() {
      */
     @Throws(PatternSyntaxException::class)
     fun isUrl(str: String?): Boolean {
-        val regExp = "\\b((https?|http):\\/\\/)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[A-Za-z]{2,6}\\b(\\/[-a-zA-Z0-9@:%_\\+.~#?&//=]*)*(?:\\/|\\b)"
+        val regExp = "\\b((https?|http?):\\/\\/)?[-a-zA-Z0-9@:%._\\+~#=]{2,256}\\.[A-Za-z]{2,6}\\b(\\/[-a-zA-Z0-9@:%_\\+.~#?&//=]*)*(?:\\/|\\b)"
         val p = Pattern.compile(regExp)
         val m = p.matcher(str)
         return m.matches()
@@ -279,5 +326,7 @@ class BrowserActivity : AppCompatActivity() {
             var result = data?.getStringExtra(ScanActivity.KEY_SCAN_RESULT)
             openUrlOrSearch(result)
         }
+        //TODO("历史记录请求结果处理")
+        //TODO("书签请求结果处理")
     }
 }

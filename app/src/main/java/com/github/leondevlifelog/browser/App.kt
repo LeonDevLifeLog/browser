@@ -12,8 +12,15 @@ import com.tencent.smtt.sdk.QbSdk
 
 class App : Application() {
     val TAG: String = "App"
+
+    companion object {
+        lateinit var instance: App
+            private set
+    }
+
     override fun onCreate() {
         super.onCreate()
+        instance = this
         if (LeakCanary.isInAnalyzerProcess(this)) {
             // This process is dedicated to LeakCanary for heap analysis.
             // You should not init your app in this process.

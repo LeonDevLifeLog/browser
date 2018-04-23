@@ -6,19 +6,13 @@ import android.view.MenuItem
 import com.github.leondevlifelog.browser.R
 import kotlinx.android.synthetic.main.tolbar.*
 
-class HistoryActivity : AppCompatActivity() {
-    companion object {
-        /**
-         * 历史数据 请求码
-         */
-        const val REQUEST_HISTORY = 12
-    }
+class DownLoadActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_history)
+        setContentView(R.layout.activity_down_load)
         setSupportActionBar(toolbar)
-        supportActionBar?.title = "历史记录"
+        supportActionBar?.title = "下载管理"
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 

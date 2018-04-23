@@ -1,4 +1,4 @@
-package com.github.leondevlifelog.browser
+package com.github.leondevlifelog.browser.behavior
 
 import android.content.Context
 import android.support.design.widget.AppBarLayout
@@ -15,13 +15,9 @@ import android.view.View
  * @since V4.0.0
  */
 class BottomNavigationViewBehavior : CoordinatorLayout.Behavior<View> {
-    constructor() {}
+    constructor()
 
-    constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {}
-
-    override fun onLayoutChild(parent: CoordinatorLayout?, child: View?, layoutDirection: Int): Boolean {
-        return super.onLayoutChild(parent, child, layoutDirection)
-    }
+    constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
     override fun layoutDependsOn(parent: CoordinatorLayout?, child: View?, dependency: View?): Boolean {
         return dependency is AppBarLayout

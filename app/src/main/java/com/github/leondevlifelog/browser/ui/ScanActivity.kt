@@ -1,17 +1,14 @@
 package com.github.leondevlifelog.browser.ui
 
-import android.Manifest
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import cn.bingoogolapple.qrcode.core.QRCodeView
+import android.view.MenuItem
+import com.github.leondevlifelog.browser.BuildConfig
 import com.github.leondevlifelog.browser.R
 import com.jyuesong.android.kotlin.extract._toast
 import kotlinx.android.synthetic.main.activity_scan.*
-import pub.devrel.easypermissions.AfterPermissionGranted
-import pub.devrel.easypermissions.EasyPermissions
-
 
 class ScanActivity : AppCompatActivity() {
     companion object {
@@ -23,37 +20,35 @@ class ScanActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scan)
-        zxingView.setDelegate(object : QRCodeView.Delegate {
-            override fun onScanQRCodeSuccess(result: String?) {
-                var intent = Intent()
-                intent.putExtra(KEY_SCAN_RESULT, result)
-                _toast("扫描成功!")
-                setResult(Activity.RESULT_OK, intent)
-                finish()
-            }
-
-            override fun onScanQRCodeOpenCameraError() {
-                _toast("相机打开出错")
-                setResult(Activity.RESULT_CANCELED)
-                finish()
-            }
-        })
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
-    }
-
-    fun onPermissionsGranted(requestCode: Int, perms: List<String>) {}
-
-    fun onPermissionsDenied(requestCode: Int, perms: List<String>) {}
-
-    @AfterPermissionGranted(REQUEST_CODE_QRCODE_PERMISSIONS)
-    private fun requestCodeQRCodePermissions() {
-        if (!EasyPermissions.hasPermissions(this, Manifest.permission.CAMERA)) {
-            EasyPermissions.requestPermissions(this, "扫描二维码需要打开相机和散光灯的权限",
-                    REQUEST_CODE_QRCODE_PERMISSIONS, Manifest.permission.CAMERA)
+        setSupportActionBar(toolbarScan)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow_back_black_24dp)
+        supportActionBar?.title = "扫一扫"
+        scannerView.setOnScannerCompletionListener { rawResult, parsedResult, barcode ->
+            var intent = Intent()
+            intent.putExtra(KEY_SCAN_RESULT, parsedResult.displayResult)
+            if (BuildConfig.DEBUG)
+                _toast("扫描成功!\n${parsedResult.displayResult}")
+            setResult(Activity.RESULT_OK, intent)
+            finish()
         }
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        if (item?.itemId == android.R.id.home) {
+            onBackPressed()
+            return true
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onResume() {
+        scannerView.onResume()
+        super.onResume()
+    }
+
+    override fun onPause() {
+        scannerView.onPause()
+        super.onPause()
     }
 }

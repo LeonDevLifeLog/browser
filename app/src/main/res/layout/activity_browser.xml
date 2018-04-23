@@ -67,7 +67,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            app:layout_behavior="com.github.leondevlifelog.browser.BottomNavigationViewBehavior" />
+            app:layout_behavior="com.github.leondevlifelog.browser.behavior.BottomNavigationViewBehavior" />
 
     </android.support.design.widget.CoordinatorLayout>
 </android.support.v4.widget.SwipeRefreshLayout>
