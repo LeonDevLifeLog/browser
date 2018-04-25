@@ -63,7 +63,7 @@
         <item>3</item>
     </string-array>
 
-    <string-array name="multi_select_list_preference_default_value" />
+    <string-array name="multi_select_list_preference_default_value"/>
 
     <string name="pref_title_system_sync_settings">System sync settings</string>
 
@@ -76,9 +76,15 @@
     <string name="pref_ringtone_silent">Silent</string>
 
     <string name="pref_title_vibrate">Vibrate</string>
-    <string name="my_bottom_sheet_behavior">com.github.leondevlifelog.browser.behavior.AutoCloseBottomSheetBehavior</string>
+    <string name="my_bottom_sheet_behavior">com.github.leondevlifelog.browser.behavior.AutoCloseBottomSheetBehavior
+    </string>
     <string name="url_home">browser://home</string>
     <string name="title_home">首页</string>
     <string name="browser_scheme">browser</string>
+    <string name="permission_camera_denied">没有赋予摄像头权限</string>
+    <string name="permission_camera_never_askagain">不再询问摄像头权限</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

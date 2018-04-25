@@ -2,6 +2,8 @@ package com.github.leondevlifelog.browser
 
 import android.app.Application
 import android.util.Log
+import com.androidev.download.DefaultNotifier
+import com.androidev.download.DownloadManager
 import com.squareup.leakcanary.LeakCanary
 
 import com.tencent.smtt.sdk.QbSdk
@@ -27,6 +29,8 @@ class App : Application() {
             return
         }
         LeakCanary.install(this)
+        DownloadManager.getInstance().initialize(this, 3)
+        DownloadManager.getInstance().setDownloadNotifier(DefaultNotifier(this))
         QbSdk.initBuglyAsync(true)
         QbSdk.initX5Environment(this, object : QbSdk.PreInitCallback {
             override fun onCoreInitFinished() {

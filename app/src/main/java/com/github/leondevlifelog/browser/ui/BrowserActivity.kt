@@ -25,6 +25,7 @@ import com.github.leondevlifelog.browser.R
 import com.github.leondevlifelog.browser.TabsAdapter
 import com.github.leondevlifelog.browser.bean.TabInfo
 import com.github.leondevlifelog.browser.database.AppDatabaseImpl
+import com.github.leondevlifelog.browser.database.entities.BookMark
 import com.github.leondevlifelog.browser.database.entities.History
 import com.github.leondevlifelog.browser.view.AddressBarView
 import com.github.leondevlifelog.browser.view.MyWebView
@@ -202,7 +203,10 @@ class BrowserActivity : AppCompatActivity() {
             dialogBuilder.setView(dialogView)
             dialogBuilder.setTitle("保存书签")
             dialogBuilder.setPositiveButton("保存", { dialog, which ->
-                //TODO("添加书签 保存到数据库")
+                AsyncTask.execute {
+                    AppDatabaseImpl.instance.bookMarkDao().insert(BookMark(title = title.text.toString(),
+                            url = url.text.toString(), time = Date()))
+                }
             })
             dialogBuilder.setNegativeButton("取消", { dialog, which ->
                 dialog.dismiss()
@@ -288,8 +292,11 @@ class BrowserActivity : AppCompatActivity() {
 
     private fun openUrlOrSearch(urlOrKeyWord: String?) {
         if (isUrl(urlOrKeyWord)) {
-            if (!urlOrKeyWord?.startsWith("http")!! and !urlOrKeyWord.startsWith("https"))
+            if (!urlOrKeyWord?.startsWith("http")!! and !urlOrKeyWord.startsWith("https")) {
                 mAgentWeb.urlLoader.loadUrl("http://$urlOrKeyWord")
+            } else {
+                mAgentWeb.urlLoader.loadUrl(urlOrKeyWord)
+            }
         } else {
             mAgentWeb.urlLoader.loadUrl("https://m.baidu.com/s?&wd=$urlOrKeyWord")
         }
@@ -321,6 +328,8 @@ class BrowserActivity : AppCompatActivity() {
 
     override fun onResume() {
         mAgentWeb.webLifeCycle.onResume()
+        bottomTabsSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
+        bottomMenuSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
         super.onResume()
     }
 
@@ -331,11 +340,20 @@ class BrowserActivity : AppCompatActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == ScanActivity.REQUEST_SCAN_CODE && resultCode == Activity.RESULT_OK) {
-            var result = data?.getStringExtra(ScanActivity.KEY_SCAN_RESULT)
+        if (resultCode != Activity.RESULT_OK) {
+            return
+        }
+        if (requestCode == ScanActivity.REQUEST_SCAN_CODE) {
+            val result = data?.getStringExtra(ScanActivity.KEY_SCAN_RESULT)
             openUrlOrSearch(result)
         }
-        //TODO("历史记录请求结果处理")
-        //TODO("书签请求结果处理")
+        if (requestCode == HistoryActivity.REQUEST_HISTORY) {
+            val result = data?.getParcelableExtra<History>(HistoryActivity.KEY_RESULT_HISTORY)
+            openUrlOrSearch(result?.url)
+        }
+        if (requestCode == BookmarkActivity.REQUEST_BOOKMARK) {
+            val result = data?.getParcelableExtra<BookMark>(BookmarkActivity.KEY_RESULT_BOOKMARK)
+            openUrlOrSearch(result?.url)
+        }
     }
 }

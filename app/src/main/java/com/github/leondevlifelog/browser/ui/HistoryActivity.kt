@@ -1,9 +1,14 @@
 package com.github.leondevlifelog.browser.ui
 
+import android.app.Activity
+import android.content.Intent
 import android.os.AsyncTask
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.DividerItemDecoration
+import android.support.v7.widget.RecyclerView.VERTICAL
 import android.view.MenuItem
+import android.view.View
 import com.github.leondevlifelog.browser.R
 import com.github.leondevlifelog.browser.adapter.AdapterHistory
 import com.github.leondevlifelog.browser.database.AppDatabaseImpl
@@ -17,6 +22,7 @@ class HistoryActivity : AppCompatActivity() {
          * 历史数据 请求码
          */
         const val REQUEST_HISTORY = 12
+        const val KEY_RESULT_HISTORY = "KEY_RESULT_HISTORY"
     }
 
     private var listHistory: List<History>? = null
@@ -29,9 +35,19 @@ class HistoryActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         AsyncTask.execute {
             listHistory = AppDatabaseImpl.instance.historyDao().listHistory()
+            var adapterHistory = AdapterHistory(listHistory)
+            adapterHistory.onItemClickListener = object : AdapterHistory.OnItemClickListener {
+                override fun onClick(view: View, position: Int) {
+                    var intent = Intent()
+                    intent.putExtra(KEY_RESULT_HISTORY, listHistory!![position])
+                    setResult(Activity.RESULT_OK, intent)
+                    finish()
+                }
+            }
+            rvHistoryList.addItemDecoration(DividerItemDecoration(this@HistoryActivity, VERTICAL))
+            rvHistoryList.adapter = adapterHistory
             rvHistoryList.adapter.notifyDataSetChanged()
         }
-        rvHistoryList.adapter = AdapterHistory(listHistory)
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {

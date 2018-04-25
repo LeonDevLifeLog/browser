@@ -7,10 +7,10 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.github.leondevlifelog.browser.R
-import com.github.leondevlifelog.browser.database.entities.History
+import com.github.leondevlifelog.browser.database.entities.BookMark
 import java.text.SimpleDateFormat
 
-class AdapterHistory(var data: List<History>?) : RecyclerView.Adapter<AdapterHistory.ViewHolder>() {
+class AdapterBookMark(var data: List<BookMark>?) : RecyclerView.Adapter<AdapterBookMark.ViewHolder>() {
     interface OnItemClickListener {
         fun onClick(view: View, position: Int)
     }
@@ -46,7 +46,7 @@ class AdapterHistory(var data: List<History>?) : RecyclerView.Adapter<AdapterHis
             itemHistory = itemView?.findViewById(R.id.itemHistory)
         }
 
-        fun setData(x: History): Unit {
+        fun setData(x: BookMark): Unit {
             tvTitle?.text = x.title
             tvUrl?.text = x.url
             tvTime?.text = SimpleDateFormat("yyyy-MM-dd hh:mm").format(x.time)
