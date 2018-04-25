@@ -1,16 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<preference-headers xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- These settings headers are only used on tablets. -->
+<preference-headers
+        xmlns:android="http://schemas.android.com/apk/res/android">
 
     <header
-        android:fragment="com.github.leondevlifelog.browser.ui.fragments.UserSettingsFragment"
-        android:icon="@drawable/ic_info_black_24dp"
-        android:title="@string/pref_header_user" />
+            android:fragment="com.github.leondevlifelog.browser.ui.fragments.SettingsUserFragment"
+            android:icon="@drawable/ic_settings_account"
+            android:title="@string/pref_header_user"/>
 
     <header
-        android:fragment="com.github.leondevlifelog.browser.ui.fragments.SettingsFragment"
-        android:icon="@drawable/ic_info_black_24dp"
-        android:title="@string/pref_header_browser" />
+            android:fragment="com.github.leondevlifelog.browser.ui.fragments.SettingsGeneralFragment"
+            android:icon="@drawable/ic_settings_general"
+            android:title="@string/pref_header_general"/>
+    <header
+            android:fragment="com.github.leondevlifelog.browser.ui.fragments.SettingsPrivateFragment"
+            android:icon="@drawable/ic_settings_private"
+            android:title="@string/pref_header_private"/>
+    <header
+            android:fragment="com.github.leondevlifelog.browser.ui.fragments.SettingsAdvanceFragment"
+            android:icon="@drawable/ic_settings_advance"
+            android:title="@string/pref_header_advance"/>
+    <header
+            android:fragment="com.github.leondevlifelog.browser.ui.fragments.SettingsAboutFragment"
+            android:icon="@drawable/ic_settings_about"
+            android:title="@string/pref_header_about"/>
 
 
 </preference-headers>

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp">
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="4">
+
+        <TextView
+                android:id="@+id/actionToolsEnableImg"
+                style="@style/menu_item_button"
+                android:drawableTop="@drawable/ic_enable_img"
+                android:text="有图模式"/>
+
+        <TextView
+                android:id="@+id/actionToolsPcMode"
+                style="@style/menu_item_button"
+                android:drawableTop="@drawable/ic_pc_mode"
+                android:text="电脑模式"/>
+
+        <TextView
+                android:id="@+id/actionToolsUagent"
+                style="@style/menu_item_button"
+                android:drawableTop="@drawable/ic_uagent_setting"
+                android:text="浏览器标识"/>
+
+        <TextView
+                android:id="@+id/actionToolsCopyLink"
+                style="@style/menu_item_button"
+                android:drawableTop="@drawable/ic_copy_link"
+                android:text="复制链接"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+        <TextView
+                android:id="@+id/actionToolsSaveWeb"
+                style="@style/menu_item_button"
+                android:drawableTop="@drawable/ic_save_web"
+                android:text="保存网页"/>
+
+        <TextView
+                android:id="@+id/actionToolsClipWeb"
+                style="@style/menu_item_button"
+                android:drawableTop="@drawable/ic_clip_web"
+                android:text="截图"/>
+
+        <TextView
+                android:id="@+id/actionToolsExportLauncher"
+                style="@style/menu_item_button"
+                android:drawableTop="@drawable/ic_export_laucher"
+                android:text="发送到桌面"/>
+
+        <TextView
+                android:id="@+id/actionToolsSearchWeb"
+                style="@style/menu_item_button"
+                android:drawableTop="@drawable/ic_search_web"
+                android:text="页面查找"/>
+    </LinearLayout>
+
+
+</LinearLayout>

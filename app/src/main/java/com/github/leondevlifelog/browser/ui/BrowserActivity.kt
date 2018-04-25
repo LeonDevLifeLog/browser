@@ -46,6 +46,7 @@ class BrowserActivity : AppCompatActivity() {
     private val TAG: String = "BrowserActivity"
     private var bottomMenuSheetBehavior: BottomSheetBehavior<LinearLayout>? = null
     private var bottomTabsSheetBehavior: BottomSheetBehavior<LinearLayout>? = null
+    private var bottomToolsSheetBehavior: BottomSheetBehavior<LinearLayout>? = null
     private lateinit var tabs: ObversableTabsInfo
     private lateinit var mAgentWeb: AgentWeb
 
@@ -79,6 +80,7 @@ class BrowserActivity : AppCompatActivity() {
         }
         bottomMenuSheetBehavior = BottomSheetBehavior.from(bottomSheetMenu)
         bottomTabsSheetBehavior = BottomSheetBehavior.from(bottomTabsMenu)
+        bottomToolsSheetBehavior = BottomSheetBehavior.from(bottomToolsMenu)
         actionMenu.setOnClickListener({
             if (bottomMenuSheetBehavior?.state == BottomSheetBehavior.STATE_COLLAPSED)
                 bottomMenuSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
@@ -213,6 +215,10 @@ class BrowserActivity : AppCompatActivity() {
             })
             dialogBuilder.show()
         }
+        actionMenuToolbox.setOnClickListener {
+            bottomMenuSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
+            bottomToolsSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
+        }
     }
 
     /**
@@ -330,6 +336,7 @@ class BrowserActivity : AppCompatActivity() {
         mAgentWeb.webLifeCycle.onResume()
         bottomTabsSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
         bottomMenuSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
+        bottomToolsSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
         super.onResume()
     }
 

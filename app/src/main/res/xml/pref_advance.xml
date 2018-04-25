@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <SwitchPreference
+            android:defaultValue="false"
+            android:title="强制缩放"
+            android:key="switch_preference_1"/>
+    <SwitchPreference
+            android:defaultValue="false"
+            android:title="拦截弹出窗口"
+            android:key="switch_preference_2"/>
+    <SwitchPreference
+            android:defaultValue="false"
+            android:title="启用Javascript"
+            android:key="switch_preference_3"/>
+    <SwitchPreference
+            android:defaultValue="false"
+            android:title="启动时恢复未关闭的标签页"
+            android:key="switch_preference_4"/>
+</PreferenceScreen>

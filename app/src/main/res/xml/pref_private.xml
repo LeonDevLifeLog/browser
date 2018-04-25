@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <SwitchPreference
+            android:defaultValue="false"
+            android:title="位置权限"
+            android:key="location_permission"
+            android:summary="是否允许Web获取您的位置"/>
+    <SwitchPreference
+            android:defaultValue="false"
+            android:title="不跟踪"
+            android:key="switch_preference_1"
+            android:summary="禁止网站追踪您的使用习惯"/>
+</PreferenceScreen>

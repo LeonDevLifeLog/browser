@@ -1,73 +1,88 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v4.widget.SwipeRefreshLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/srlMain"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.github.leondevlifelog.browser.ui.BrowserActivity">
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/srlMain"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:context="com.github.leondevlifelog.browser.ui.BrowserActivity">
 
     <android.support.design.widget.CoordinatorLayout
-        android:id="@+id/textContent"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+            android:id="@+id/textContent"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
         <android.support.design.widget.AppBarLayout
-            android:id="@+id/appbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:elevation="0dp">
-
-            <com.github.leondevlifelog.browser.view.AddressBarView
-                android:id="@+id/addressBarView"
+                android:id="@+id/appbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="top"
-                app:drawableClear="@drawable/ic_clear"
-                app:drawableNoneSecurity="@drawable/ic_warning"
-                app:drawableScan="@drawable/ic_scanning"
-                app:drawableSearch="@drawable/ic_search"
-                app:drawableSecurity="@drawable/ic_security"
-                app:layout_scrollFlags="scroll|enterAlways|snap" />
+                app:elevation="0dp">
+
+            <com.github.leondevlifelog.browser.view.AddressBarView
+                    android:id="@+id/addressBarView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top"
+                    app:drawableClear="@drawable/ic_clear"
+                    app:drawableNoneSecurity="@drawable/ic_warning"
+                    app:drawableScan="@drawable/ic_scanning"
+                    app:drawableSearch="@drawable/ic_search"
+                    app:drawableSecurity="@drawable/ic_security"
+                    app:layout_scrollFlags="scroll|enterAlways|snap"/>
 
         </android.support.design.widget.AppBarLayout>
 
         <LinearLayout
-            android:id="@+id/bottomSheetMenu"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingBottom="@dimen/bottom_navigator_height"
-            app:behavior_hideable="false"
-            app:behavior_peekHeight="0.01dp"
-            app:layout_behavior="@string/my_bottom_sheet_behavior">
+                android:id="@+id/bottomSheetMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/bottom_navigator_height"
+                app:behavior_hideable="false"
+                app:behavior_peekHeight="0.01dp"
+                app:layout_behavior="@string/my_bottom_sheet_behavior">
 
-            <include layout="@layout/view_menu_content" />
+            <include layout="@layout/view_menu_content"/>
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/bottomTabsMenu"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingBottom="@dimen/bottom_navigator_height"
-            app:behavior_hideable="false"
-            app:behavior_peekHeight="0.01dp"
-            app:layout_behavior="@string/my_bottom_sheet_behavior">
+                android:id="@+id/bottomTabsMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/bottom_navigator_height"
+                app:behavior_hideable="false"
+                app:behavior_peekHeight="0.01dp"
+                app:layout_behavior="@string/my_bottom_sheet_behavior">
 
-            <requestFocus />
+            <requestFocus/>
 
-            <include layout="@layout/view_tabs_content" />
+            <include layout="@layout/view_tabs_content"/>
+        </LinearLayout>
+
+        <LinearLayout
+                android:id="@+id/bottomToolsMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/bottom_navigator_height"
+                app:behavior_hideable="false"
+                app:behavior_peekHeight="0.01dp"
+                app:layout_behavior="@string/my_bottom_sheet_behavior">
+
+            <requestFocus/>
+
+            <include layout="@layout/view_tools_content"/>
         </LinearLayout>
 
         <com.github.leondevlifelog.browser.view.BottomNavigatorBar
-            android:id="@+id/bottomNavigator"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            app:layout_behavior="com.github.leondevlifelog.browser.behavior.BottomNavigationViewBehavior" />
+                android:id="@+id/bottomNavigator"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                app:layout_behavior="com.github.leondevlifelog.browser.behavior.BottomNavigationViewBehavior"/>
 
     </android.support.design.widget.CoordinatorLayout>
 </android.support.v4.widget.SwipeRefreshLayout>
