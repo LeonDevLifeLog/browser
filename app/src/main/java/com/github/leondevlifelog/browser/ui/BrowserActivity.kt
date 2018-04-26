@@ -1,29 +1,48 @@
 package com.github.leondevlifelog.browser.ui
 
+import android.Manifest
 import android.app.Activity
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.Canvas
+import android.graphics.Paint
+import android.graphics.drawable.BitmapDrawable
+import android.net.Uri
 import android.os.AsyncTask
+import android.os.Build
 import android.os.Bundle
+import android.os.Environment
+import android.os.Environment.DIRECTORY_DOWNLOADS
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.BottomSheetBehavior
 import android.support.design.widget.CoordinatorLayout
 import android.support.design.widget.TextInputEditText
+import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
+import android.util.Log
 import android.view.KeyEvent
+import android.view.MenuItem
 import android.view.View
+import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
+import android.webkit.JavascriptInterface
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.LinearLayout
+import android.widget.PopupMenu
 import com.github.leondevlifelog.browser.ObversableTabsInfo
 import com.github.leondevlifelog.browser.R
 import com.github.leondevlifelog.browser.TabsAdapter
 import com.github.leondevlifelog.browser.bean.TabInfo
+import com.github.leondevlifelog.browser.behavior.TopSheetBehavior
 import com.github.leondevlifelog.browser.database.AppDatabaseImpl
 import com.github.leondevlifelog.browser.database.entities.BookMark
 import com.github.leondevlifelog.browser.database.entities.History
@@ -36,17 +55,26 @@ import jp.wasabeef.recyclerview.animators.SlideInLeftAnimator
 import kotlinx.android.synthetic.main.activity_browser.*
 import kotlinx.android.synthetic.main.bottpm_navigator_bar.*
 import kotlinx.android.synthetic.main.view_menu_content.*
+import kotlinx.android.synthetic.main.view_search_web.*
 import kotlinx.android.synthetic.main.view_tabs_content.*
+import kotlinx.android.synthetic.main.view_tools_content.*
+import permissions.dispatcher.NeedsPermission
+import permissions.dispatcher.RuntimePermissions
+import java.io.File
+import java.io.FileOutputStream
+import java.io.IOException
 import java.util.*
 import java.util.regex.Pattern
 import java.util.regex.PatternSyntaxException
 import kotlin.concurrent.schedule
 
+@RuntimePermissions
 class BrowserActivity : AppCompatActivity() {
     private val TAG: String = "BrowserActivity"
     private var bottomMenuSheetBehavior: BottomSheetBehavior<LinearLayout>? = null
     private var bottomTabsSheetBehavior: BottomSheetBehavior<LinearLayout>? = null
     private var bottomToolsSheetBehavior: BottomSheetBehavior<LinearLayout>? = null
+    private var topSearchBehavior: TopSheetBehavior<LinearLayout>? = null
     private lateinit var tabs: ObversableTabsInfo
     private lateinit var mAgentWeb: AgentWeb
 
@@ -56,9 +84,13 @@ class BrowserActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            WebView.enableSlowWholeDocumentDraw()
+        }
         setContentView(R.layout.activity_browser)
         initWebView()
         initSwipeRefresh()
+        initSearchPanel()
         addressBarView.onActionButtonClickListener = object : AddressBarView.OnActionButtonClickListener {
             override fun onSecurityBtnClick(v: View) {
             }
@@ -81,6 +113,7 @@ class BrowserActivity : AppCompatActivity() {
         bottomMenuSheetBehavior = BottomSheetBehavior.from(bottomSheetMenu)
         bottomTabsSheetBehavior = BottomSheetBehavior.from(bottomTabsMenu)
         bottomToolsSheetBehavior = BottomSheetBehavior.from(bottomToolsMenu)
+        topSearchBehavior = TopSheetBehavior.from(topSearchPanel)
         actionMenu.setOnClickListener({
             if (bottomMenuSheetBehavior?.state == BottomSheetBehavior.STATE_COLLAPSED)
                 bottomMenuSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
@@ -219,6 +252,122 @@ class BrowserActivity : AppCompatActivity() {
             bottomMenuSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
             bottomToolsSheetBehavior?.state = BottomSheetBehavior.STATE_EXPANDED
         }
+        actionToolsUagent.setOnClickListener {
+            var popupMenu = PopupMenu(this@BrowserActivity, it)
+            popupMenu.inflate(R.menu.menu_tools_uagent)
+            popupMenu.setOnMenuItemClickListener { item: MenuItem? ->
+                when (item?.itemId) {
+                    R.id.menu_pc -> MenuItem.OnMenuItemClickListener {
+                        Log.d(TAG, "onCreate: ")
+                        return@OnMenuItemClickListener true
+                        //TODO 完善选择uagent
+                    }
+
+                }
+                return@setOnMenuItemClickListener true
+            }
+            popupMenu.show()
+        }
+        actionToolsCopyLink.setOnClickListener {
+            var systemService = this@BrowserActivity.getSystemService(android.content.Context.CLIPBOARD_SERVICE) as ClipboardManager
+            systemService.primaryClip = ClipData.newPlainText(null, tabs.selectedTab?.url)
+            _toast("成功复制链接到剪贴板")
+        }
+        actionToolsExportLauncher.setOnClickListener {
+            addShortcut()
+        }
+        actionToolsSaveWeb.setOnClickListener {
+            saveWebToFileWithPermissionCheck()
+        }
+        actionToolsClipWeb.setOnClickListener {
+            var cropWebView = getCropWebView(webView)
+            AsyncTask.execute {
+                saveBitmapToFileWithPermissionCheck(cropWebView, tabs.selectedTab?.title!!)
+            }
+            _toast("保存成功")
+        }
+        actionToolsSearchWeb.setOnClickListener {
+            topSearchBehavior?.state = TopSheetBehavior.STATE_EXPANDED
+            etSearchInput.requestFocus()
+            var inputService = this@BrowserActivity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            inputService.showSoftInput(etSearchInput, InputMethodManager.SHOW_IMPLICIT)
+            bottomToolsSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
+        }
+    }
+
+    /**
+     * 初始化搜索面板
+     */
+    private fun initSearchPanel() {
+        ibSearchClose.setOnClickListener {
+            etSearchInput.setText("")
+            tvSearchResultCount.text = "0/0"
+            topSearchBehavior?.state = TopSheetBehavior.STATE_COLLAPSED
+        }
+        webView.setFindListener({ activeMatchOrdinal, numberOfMatches, isDoneCounting ->
+            if (activeMatchOrdinal != numberOfMatches)
+                tvSearchResultCount.text = "${activeMatchOrdinal + 1}/$numberOfMatches"
+        })
+        etSearchInput.setOnEditorActionListener { v, actionId, event ->
+            if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                if (etSearchInput.text.length < 0) {
+                    _toast("请输入关键词")
+                    return@setOnEditorActionListener false
+                }
+                var inputService = this@BrowserActivity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                inputService.hideSoftInputFromWindow(v.windowToken, 0)
+                webView.findAllAsync(etSearchInput.text.toString())
+                return@setOnEditorActionListener true
+            }
+            return@setOnEditorActionListener false
+        }
+        btSearchNextResult.setOnClickListener {
+            webView.findNext(true)
+
+        }
+    }
+
+
+    /**
+     * 保存网页到SD卡的Download目录
+     */
+    @NeedsPermission(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    fun saveWebToFile() {
+        mAgentWeb.jsInterfaceHolder.addJavaObject("android", this)
+        mAgentWeb.webCreator.webView.loadUrl("javascript:window.android.processHTML('<html>'+document.getElementsByTagName('html')[0].innerHTML+'</html>');")
+
+    }
+
+    @JavascriptInterface
+    fun processHTML(html: String?) {
+        if (html == null)
+            return
+        var downloadFolder = Environment.getExternalStoragePublicDirectory(DIRECTORY_DOWNLOADS)
+        if (!downloadFolder.exists()) {
+            _toast("保存失败")
+            return
+        }
+        var file = File(downloadFolder, "${tabs.selectedTab?.title}.html")
+        file.writeText(html, Charsets.UTF_8)
+        _toast("保存网页至:${file.absolutePath}")
+    }
+
+    /**
+     * 添加网址快捷方式到桌面
+     */
+    private fun addShortcut() {
+        var shortcut = Intent("com.android.launcher.action.INSTALL_SHORTCUT")
+        var icon = (ContextCompat.getDrawable(this, R.mipmap.ic_launcher) as BitmapDrawable).bitmap
+        var uri = Uri.parse(tabs.selectedTab?.url)
+        var pendingIntent = Intent(Intent.ACTION_VIEW, uri)
+        //桌面快捷方式图标
+        shortcut.putExtra(Intent.EXTRA_SHORTCUT_ICON, icon)
+        //桌面快捷方式标题
+        shortcut.putExtra(Intent.EXTRA_SHORTCUT_NAME,
+                tabs.selectedTab?.title)
+        //桌面快捷方式动作:点击图标时的动作
+        shortcut.putExtra(Intent.EXTRA_SHORTCUT_INTENT, pendingIntent)
+        sendBroadcast(shortcut)
     }
 
     /**
@@ -231,6 +380,61 @@ class BrowserActivity : AppCompatActivity() {
         srlMain.setProgressViewOffset(false, _dip2px(52), _dip2px(120))
         srlMain.setColorSchemeResources(android.R.color.holo_blue_bright, android.R.color.holo_green_light, android.R.color.holo_orange_light, android.R.color.holo_red_light)
         srlMain.setDistanceToTriggerSync(_dip2px(120))
+    }
+
+    /**
+     * 收起工具箱面板
+     */
+    fun hidenToolsPanel() {
+        bottomToolsSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
+    }
+
+    /**
+     * 保存bitmap为图片
+     */
+    @NeedsPermission(Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+    fun saveBitmapToFile(x: Bitmap, fileName: String) {
+        var downloadFolder = Environment.getExternalStoragePublicDirectory(DIRECTORY_DOWNLOADS)
+        if (!downloadFolder.exists()) {
+            _toast("保存失败")
+            return
+        }
+        var file = File(downloadFolder, "$fileName.png")
+        var out: FileOutputStream? = null
+        try {
+            out = FileOutputStream(file)
+            x.compress(Bitmap.CompressFormat.PNG, 50, out) // bmp is your Bitmap instance
+        } catch (e: Exception) {
+            e.printStackTrace()
+        } finally {
+            try {
+                if (out != null) {
+                    out.close()
+                }
+            } catch (e: IOException) {
+                e.printStackTrace()
+            }
+        }
+    }
+
+    /**
+     * 截长图
+     */
+    fun getCropWebView(x: WebView): Bitmap {
+        // WebView 生成长图，也就是超过一屏的图片，代码中的 longImage 就是最后生成的长图
+        x.measure(View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED),
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED))
+        x.layout(0, 0, x.measuredWidth, x.measuredHeight)
+        x.isDrawingCacheEnabled = true
+        x.buildDrawingCache()
+        var longImage = Bitmap.createBitmap(x.measuredWidth,
+                x.measuredHeight, Bitmap.Config.ARGB_8888)
+
+        var canvas = Canvas(longImage)  // 画布的宽高和 WebView 的网页保持一致
+        var paint = Paint()
+        canvas.drawBitmap(longImage, 0f, x.measuredHeight.toFloat(), paint)
+        x.draw(canvas)
+        return longImage
     }
 
     /**
@@ -362,5 +566,10 @@ class BrowserActivity : AppCompatActivity() {
             val result = data?.getParcelableExtra<BookMark>(BookmarkActivity.KEY_RESULT_BOOKMARK)
             openUrlOrSearch(result?.url)
         }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        onRequestPermissionsResult(requestCode, grantResults)
     }
 }

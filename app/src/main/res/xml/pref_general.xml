@@ -1,38 +1,35 @@
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen
+        xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- NOTE: EditTextPreference accepts EditText attributes. -->
-    <!-- NOTE: EditTextPreference's summary should be set to its value by the activity code. -->
-
-    <!-- NOTE: Hide buttons to simplify the UI. Users can touch outside the dialog to
-         dismiss it. -->
-    <!-- NOTE: ListPreference's summary should be set to its value by the activity code. -->
-
-    <ListPreference
-            android:defaultValue="1"
-            android:title="主页"
-            android:entries="@array/list_preference_entries"
-            android:entryValues="@array/list_preference_entries"
-            android:key="list_preference_2"/>
-    <ListPreference
-            android:defaultValue="1"
-            android:title="浏览器标识"
-            android:entries="@array/list_preference_entries"
-            android:entryValues="@array/list_preference_entries"
-            android:key="list_preference_1"/>
-    <ListPreference
-            android:defaultValue="1"
-            android:title="搜索引擎"
-            android:entries="@array/list_preference_entries"
-            android:entryValues="@array/list_preference_entries"
-            android:key="list_preference_3"/>
-    <EditTextPreference
-            android:defaultValue="Default value"
-            android:selectAllOnFocus="true"
-            android:singleLine="true"
-            android:title="下载目录"
-            android:key="edit_text_preference_1"/>
-    <SwitchPreference
-            android:defaultValue="false"
-            android:title="退出时清除浏览记录"
-            android:key="switch_preference_1"/>
+    <PreferenceCategory
+            android:title="Preference category">
+        <ListPreference
+                android:defaultValue="1"
+                android:title="主页"
+                android:entries="@array/list_preference_entries"
+                android:entryValues="@array/list_preference_entries"
+                android:key="list_preference_2"/>
+        <ListPreference
+                android:defaultValue="1"
+                android:title="浏览器标识"
+                android:entries="@array/list_preference_entries"
+                android:entryValues="@array/list_preference_entries"
+                android:key="list_preference_1"/>
+        <ListPreference
+                android:defaultValue="1"
+                android:title="搜索引擎"
+                android:entries="@array/list_preference_entries"
+                android:entryValues="@array/list_preference_entries"
+                android:key="list_preference_3"/>
+        <EditTextPreference
+                android:defaultValue="Default value"
+                android:selectAllOnFocus="true"
+                android:singleLine="true"
+                android:title="下载目录"
+                android:key="edit_text_preference_1"/>
+        <SwitchPreference
+                android:defaultValue="false"
+                android:title="退出时清除浏览记录"
+                android:key="switch_preference_1"/>
+    </PreferenceCategory>
 </PreferenceScreen>

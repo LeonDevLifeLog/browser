@@ -77,6 +77,21 @@
             <include layout="@layout/view_tools_content"/>
         </LinearLayout>
 
+        <LinearLayout
+                android:id="@+id/topSearchPanel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/bottom_navigator_height"
+                app:behavior_hideable="false"
+                app:behavior_peekHeight="0.01dp"
+                app:layout_behavior="@string/top_sheet_behavior">
+
+            <requestFocus/>
+
+            <include layout="@layout/view_search_web"/>
+        </LinearLayout>
+
         <com.github.leondevlifelog.browser.view.BottomNavigatorBar
                 android:id="@+id/bottomNavigator"
                 android:layout_width="match_parent"

@@ -52,8 +52,8 @@
     <ImageButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_start_download"
-            android:id="@+id/ibDownload"
+            app:srcCompat="@drawable/ic_more_action"
+            android:id="@+id/ibDownloadMoreAction"
             android:background="?android:selectableItemBackgroundBorderless"
             android:layout_marginEnd="8dp"
             android:layout_weight="1"/>
