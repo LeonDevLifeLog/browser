@@ -33,6 +33,7 @@ class HistoryActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         supportActionBar?.title = "历史记录"
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        rvHistoryList.addItemDecoration(DividerItemDecoration(this@HistoryActivity, VERTICAL))
         AsyncTask.execute {
             listHistory = AppDatabaseImpl.instance.historyDao().listHistory()
             var adapterHistory = AdapterHistory(listHistory)
@@ -44,7 +45,6 @@ class HistoryActivity : AppCompatActivity() {
                     finish()
                 }
             }
-            rvHistoryList.addItemDecoration(DividerItemDecoration(this@HistoryActivity, VERTICAL))
             rvHistoryList.adapter = adapterHistory
             rvHistoryList.adapter.notifyDataSetChanged()
         }

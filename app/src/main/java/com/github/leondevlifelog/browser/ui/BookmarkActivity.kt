@@ -34,6 +34,7 @@ class BookmarkActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         supportActionBar?.title = "书签"
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        rvBookmarkList.addItemDecoration(DividerItemDecoration(this@BookmarkActivity, RecyclerView.VERTICAL))
         AsyncTask.execute {
             listBookmark = AppDatabaseImpl.instance.bookMarkDao().listAll()
             var adapterBookmark = AdapterBookMark(listBookmark)
@@ -45,7 +46,6 @@ class BookmarkActivity : AppCompatActivity() {
                     finish()
                 }
             }
-            rvBookmarkList.addItemDecoration(DividerItemDecoration(this@BookmarkActivity, RecyclerView.VERTICAL))
             rvBookmarkList.adapter = adapterBookmark
             rvBookmarkList.adapter.notifyDataSetChanged()
         }

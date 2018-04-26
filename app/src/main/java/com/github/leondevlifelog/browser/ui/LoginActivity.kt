@@ -1,9 +1,11 @@
 package com.github.leondevlifelog.browser.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import com.github.leondevlifelog.browser.R
+import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.toolbar.*
 
 class LoginActivity : AppCompatActivity() {
@@ -14,6 +16,9 @@ class LoginActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = "登录"
+        btnRegister.setOnClickListener {
+            startActivity(Intent(this@LoginActivity, RegisterActivity::class.java))
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
