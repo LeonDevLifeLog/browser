@@ -19,7 +19,7 @@ class SettingsActivity : AppCompatPreferenceActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        var appbarLayout = layoutInflater.inflate(R.layout.tolbar, null)
+        var appbarLayout = layoutInflater.inflate(R.layout.toolbar, null)
         var linearLayout = findViewById<ViewGroup>(android.R.id.content).getChildAt(0) as LinearLayout
         linearLayout.addView(appbarLayout, 0)
         setSupportActionBar(appbarLayout.findViewById(R.id.toolbar))

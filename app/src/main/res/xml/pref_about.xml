@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen>
+<PreferenceScreen
+        xmlns:android="http://schemas.android.com/apk/res/android">
+    <Preference
+            android:title="关于作品"
+            android:summary="毕设项目:基于Android的浏览器设计与实现"/>
+    <Preference
+            android:title="关于作者"
+            android:summary="李昻 南京信息工程大学滨江学院 软件工程"/>
+    <Preference
+            android:title="关于导师"
+            android:summary="教授:方忠进"/>
 
 </PreferenceScreen>

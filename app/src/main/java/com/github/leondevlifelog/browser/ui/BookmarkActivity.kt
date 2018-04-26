@@ -14,7 +14,7 @@ import com.github.leondevlifelog.browser.adapter.AdapterBookMark
 import com.github.leondevlifelog.browser.database.AppDatabaseImpl
 import com.github.leondevlifelog.browser.database.entities.BookMark
 import kotlinx.android.synthetic.main.activity_bookmark.*
-import kotlinx.android.synthetic.main.tolbar.*
+import kotlinx.android.synthetic.main.toolbar.*
 
 class BookmarkActivity : AppCompatActivity() {
 

@@ -14,7 +14,7 @@ import com.github.leondevlifelog.browser.adapter.AdapterHistory
 import com.github.leondevlifelog.browser.database.AppDatabaseImpl
 import com.github.leondevlifelog.browser.database.entities.History
 import kotlinx.android.synthetic.main.activity_history.*
-import kotlinx.android.synthetic.main.tolbar.*
+import kotlinx.android.synthetic.main.toolbar.*
 
 class HistoryActivity : AppCompatActivity() {
     companion object {

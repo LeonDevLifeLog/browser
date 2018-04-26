@@ -72,6 +72,9 @@
                 <action android:name="cn.woblog.android.downloader.DOWNLOAD_SERVICE"/>
             </intent-filter>
         </service>
+
+        <activity android:name=".ui.LoginActivity">
+        </activity>
     </application>
 
 </manifest>
