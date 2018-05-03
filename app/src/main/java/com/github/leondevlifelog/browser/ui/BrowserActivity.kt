@@ -105,6 +105,10 @@ class BrowserActivity : AppCompatActivity() {
                 openUrlOrSearch(urlOrKeyWord)
             }
 
+            /**
+             * 扫描按钮的点击事件,进行页面的跳转,进入到摄像头页面
+             * @param v 扫描按钮
+             */
             override fun onScanBtnClick(v: View) {
                 var intent = Intent(this@BrowserActivity, ScanActivity::class.java)
                 startActivityForResult(intent, ScanActivity.REQUEST_SCAN_CODE)
@@ -127,39 +131,55 @@ class BrowserActivity : AppCompatActivity() {
                 bottomTabsSheetBehavior?.state = BottomSheetBehavior.STATE_COLLAPSED
         })
         actionHome.setOnClickListener({
+            //返回首页按钮事件
             mAgentWeb.urlLoader.loadUrl("file:///android_asset/index.html")
         })
         actionForward.setOnClickListener({
+            //前进按钮事件
             if (mAgentWeb.webCreator.webView.canGoForward()) {
+                //如果可以前进的话,则进行前进操作
                 mAgentWeb.webCreator.webView.goForward()
             } else {
+                //否则提示用户
                 _toast("不能前进了")
             }
         })
         actionBack.setOnClickListener({
+            //后退按钮事件
             if (mAgentWeb.webCreator.webView.canGoBack()) {
+                //如果可以后退的话,则进行后退操作
                 mAgentWeb.webCreator.webView.goBack()
             } else {
+                //否则提示用户
                 _toast("不能后退了")
             }
         })
+        //实例化,被观察的对象(标签页数量)
         tabs = ObversableTabsInfo()
+        //给标签页设置观察者,观察标签页数量变化
         tabs.addObserver { o, arg ->
             when (arg) {
                 is Int -> {
+                    //当数量变化时,对按钮上显示的数量进行更新
                     actionTabsNum.text = arg.toString()
                     tabsAdapter.notifyItemInserted(arg - 1)
                 }
                 is TabInfo -> tabsAdapter.notifyDataSetChanged()
             }
         }
+        //实例化已开启的标签页列表的适配器
         tabsAdapter = TabsAdapter(this, tabs)
         tabsAdapter.addOnSelectedTabChangedListner(object : TabsAdapter.EventLintener {
+
             override fun onClosed(v: View, tab: TabInfo?) {
+                //进行标签页的关闭事件监听
+                //关闭当前标签页,切换至相邻的标签页
                 mAgentWeb.urlLoader.loadUrl(tab?.url)
             }
 
             override fun onSelectedChanged(tab: TabInfo) {
+                //进行标签页的切换事件的监听
+                //切换到目标的标签
                 mAgentWeb.urlLoader.loadUrl(tab.url)
                 delayCloseTabsContent()
             }
@@ -300,20 +320,26 @@ class BrowserActivity : AppCompatActivity() {
      */
     private fun initSearchPanel() {
         ibSearchClose.setOnClickListener {
+            //关闭搜索面板事件监听
             etSearchInput.setText("")
             tvSearchResultCount.text = "0/0"
             topSearchBehavior?.state = TopSheetBehavior.STATE_COLLAPSED
         }
         webView.setFindListener({ activeMatchOrdinal, numberOfMatches, isDoneCounting ->
+            //搜索结果数量变化监听
             if (activeMatchOrdinal != numberOfMatches)
+            //更新UI界面数量信息
                 tvSearchResultCount.text = "${activeMatchOrdinal + 1}/$numberOfMatches"
         })
         etSearchInput.setOnEditorActionListener { v, actionId, event ->
+            //监听键盘搜索按钮事件
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 if (etSearchInput.text.length < 0) {
+                    //对搜索关键词长度进行校验
                     _toast("请输入关键词")
                     return@setOnEditorActionListener false
                 }
+                //点击搜索按钮后隐藏键盘
                 var inputService = this@BrowserActivity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
                 inputService.hideSoftInputFromWindow(v.windowToken, 0)
                 webView.findAllAsync(etSearchInput.text.toString())
@@ -322,6 +348,7 @@ class BrowserActivity : AppCompatActivity() {
             return@setOnEditorActionListener false
         }
         btSearchNextResult.setOnClickListener {
+            //进行搜索
             webView.findNext(true)
 
         }
@@ -452,12 +479,15 @@ class BrowserActivity : AppCompatActivity() {
                 .setWebChromeClient(object : WebChromeClient() {
 
                     override fun onReceivedTitle(view: WebView?, title: String?) {
+                        //当加载网页完成,更新标签页管理页面的标签信息
                         tabs.selectedTab?.title = title.toString()
                         var url = mAgentWeb.webCreator.webView.url.toString()
                         tabsAdapter.notifyDataSetChanged()
                         super.onReceivedTitle(view, title)
+                        //将之前的刷新状态置为false
                         srlMain.isRefreshing = false
                         if ("file:///android_asset/index.html" != url)
+                        //如果不是网址导航页,则进行浏览历史记录
                             AsyncTask.execute({
                                 AppDatabaseImpl.instance.historyDao()
                                         .insert(History(title = title.toString(), url = url, time = Date()))
@@ -500,14 +530,22 @@ class BrowserActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * 打开网址链接或进行关键字搜索
+     * @param urlOrKeyWord 完成输入的内容(网址或关键字)
+     */
     private fun openUrlOrSearch(urlOrKeyWord: String?) {
+        //判断输入的内容是url还是关键字
         if (isUrl(urlOrKeyWord)) {
             if (!urlOrKeyWord?.startsWith("http")!! and !urlOrKeyWord.startsWith("https")) {
+                //如果是url的情况下,若非http开头,则补全http并进行网址载入
                 mAgentWeb.urlLoader.loadUrl("http://$urlOrKeyWord")
             } else {
+                //如果url完整则直接载入网址
                 mAgentWeb.urlLoader.loadUrl(urlOrKeyWord)
             }
         } else {
+            //如果输入的内容不是网址,则进行关键词搜索
             mAgentWeb.urlLoader.loadUrl("https://m.baidu.com/s?&wd=$urlOrKeyWord")
         }
     }

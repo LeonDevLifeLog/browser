@@ -74,6 +74,7 @@ class AddressBarView : FrameLayout {
         }
         actionScan.setImageDrawable(drawableScan)
         actionScan.setOnClickListener { v -> onActionButtonClickListener?.onScanBtnClick(v) }
+        //清空输入框按钮事件
         actionClearInput.setOnClickListener { urlInputBox.setText("") }
         urlInputBox.setOnFocusChangeListener { v, hasFocus ->
             if (hasFocus && urlInputBox.text.isNotEmpty()) {

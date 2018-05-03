@@ -10,7 +10,7 @@ import com.github.leondevlifelog.browser.R
 import com.github.leondevlifelog.browser.database.entities.BookMark
 import java.text.SimpleDateFormat
 
-class AdapterBookMark(var data: List<BookMark>?) : RecyclerView.Adapter<AdapterBookMark.ViewHolder>() {
+class AdapterBookMark(var data: MutableList<BookMark>?) : RecyclerView.Adapter<AdapterBookMark.ViewHolder>() {
     interface OnItemClickListener {
         fun onClick(view: View, position: Int)
     }

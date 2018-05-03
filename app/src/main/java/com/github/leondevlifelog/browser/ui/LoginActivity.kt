@@ -17,8 +17,22 @@ class LoginActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.title = "登录"
         btnRegister.setOnClickListener {
+            //跳转至注册界面
             startActivity(Intent(this@LoginActivity, RegisterActivity::class.java))
         }
+        btnLogin.setOnClickListener {
+            //输入内容校验
+            if (etPassword.text.length < 6) {
+                tilPassword.error = "密码长度有误"
+            } else {
+                //处理登陆逻辑
+                doLoginAction()
+            }
+        }
+    }
+
+    private fun doLoginAction() {
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {

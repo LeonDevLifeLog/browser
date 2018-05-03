@@ -1,9 +1,6 @@
 package com.github.leondevlifelog.browser.database.dao
 
-import android.arch.persistence.room.Dao
-import android.arch.persistence.room.Delete
-import android.arch.persistence.room.Insert
-import android.arch.persistence.room.Query
+import android.arch.persistence.room.*
 import com.github.leondevlifelog.browser.database.entities.BookMark
 
 @Dao
@@ -15,5 +12,8 @@ interface BookMarkDao {
     fun delete(x: BookMark)
 
     @Query("select * from bookmark")
-    fun listAll(): List<BookMark>
+    fun listAll(): MutableList<BookMark>
+
+    @Update
+    fun update(x: BookMark)
 }

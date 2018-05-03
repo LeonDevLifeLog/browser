@@ -31,11 +31,15 @@ class ScanActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_arrow_back_black_24dp)
         supportActionBar?.title = "扫一扫"
+        //给摄像头扫描视图设置结果监听,当扫描成功后,跳转回浏览器页面,打开扫描结果的网址链接
         scannerView.setOnScannerCompletionListener { rawResult, parsedResult, barcode ->
             var intent = Intent()
+            //把扫描结果放到一个intent中,传回浏览器界面
             intent.putExtra(KEY_SCAN_RESULT, parsedResult.displayResult)
             if (BuildConfig.DEBUG)
+            //扫描成功后提示扫码成功
                 _toast("扫描成功!\n${parsedResult.displayResult}")
+            //设置扫码成功标志位
             setResult(Activity.RESULT_OK, intent)
             finish()
         }

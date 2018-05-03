@@ -18,8 +18,6 @@ import kotlinx.android.synthetic.main.toolbar.*
 
 class BookmarkActivity : AppCompatActivity() {
 
-    private var listBookmark: List<BookMark>? = null
-
     companion object {
         /**
          * 书签请求码
@@ -35,20 +33,7 @@ class BookmarkActivity : AppCompatActivity() {
         supportActionBar?.title = "书签"
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         rvBookmarkList.addItemDecoration(DividerItemDecoration(this@BookmarkActivity, RecyclerView.VERTICAL))
-        AsyncTask.execute {
-            listBookmark = AppDatabaseImpl.instance.bookMarkDao().listAll()
-            var adapterBookmark = AdapterBookMark(listBookmark)
-            adapterBookmark.onItemClickListener = object : AdapterBookMark.OnItemClickListener {
-                override fun onClick(view: View, position: Int) {
-                    var intent = Intent()
-                    intent.putExtra(BookmarkActivity.KEY_RESULT_BOOKMARK, listBookmark!![position])
-                    setResult(Activity.RESULT_OK, intent)
-                    finish()
-                }
-            }
-            rvBookmarkList.adapter = adapterBookmark
-            rvBookmarkList.adapter.notifyDataSetChanged()
-        }
+        QueryAllBookMarkDate(this, rvBookmarkList).execute()
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -58,4 +43,32 @@ class BookmarkActivity : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
+
+    /**
+     * 异步查询数据库操作
+     */
+    class QueryAllBookMarkDate(var activity: BookmarkActivity, var recyclerView: RecyclerView) : AsyncTask<Unit, Unit, MutableList<BookMark>>() {
+        override fun doInBackground(vararg params: Unit?): MutableList<BookMark> {
+            //查询数据库 并返回结果
+            return AppDatabaseImpl.instance.bookMarkDao().listAll()
+        }
+
+        override fun onPostExecute(result: MutableList<BookMark>) {
+            super.onPostExecute(result)
+            //接收到查询结果,通过适配器模式在UI线程更新视图
+            var adapterBookmark = AdapterBookMark(result)
+            adapterBookmark.onItemClickListener = object : AdapterBookMark.OnItemClickListener {
+                override fun onClick(view: View, position: Int) {
+                    //当点击书签的某条数据时,打开相应网址
+                    var intent = Intent()
+                    intent.putExtra(BookmarkActivity.KEY_RESULT_BOOKMARK, result[position])
+                    activity.setResult(Activity.RESULT_OK, intent)
+                    activity.finish()
+                }
+            }
+            recyclerView.adapter = adapterBookmark
+            recyclerView.adapter.notifyDataSetChanged()
+        }
+    }
+
 }
