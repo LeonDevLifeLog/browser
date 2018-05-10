@@ -38,14 +38,14 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import android.widget.LinearLayout
 import android.widget.PopupMenu
-import com.github.leondevlifelog.browser.ObversableTabsInfo
 import com.github.leondevlifelog.browser.R
-import com.github.leondevlifelog.browser.TabsAdapter
+import com.github.leondevlifelog.browser.adapter.TabsAdapter
 import com.github.leondevlifelog.browser.bean.TabInfo
 import com.github.leondevlifelog.browser.behavior.TopSheetBehavior
 import com.github.leondevlifelog.browser.database.AppDatabaseImpl
 import com.github.leondevlifelog.browser.database.entities.BookMark
 import com.github.leondevlifelog.browser.database.entities.History
+import com.github.leondevlifelog.browser.obverser.ObversableTabsInfo
 import com.github.leondevlifelog.browser.view.AddressBarView
 import com.github.leondevlifelog.browser.view.MyWebView
 import com.just.agentweb.AgentWeb

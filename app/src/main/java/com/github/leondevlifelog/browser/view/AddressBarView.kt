@@ -23,7 +23,7 @@ import kotlinx.android.synthetic.main.view_address_bar.view.*
  *
  */
 class AddressBarView : FrameLayout {
-    val TAG: String = "AddressBarView"
+    val TAG = "AddressBarView"
     private val COUNTRIES = arrayOf("abcdAfghanistan", "asdasdf", "asdasdf", "asdasdf", "asdasdf", "asdasdf", "asdasdf", "asdasdf", "asdasdf", "asdasdf", "asdasdf", "Albania", "Algeria", "American Samoa", "Andorra", "Bahrain", "Bangladesh", "Barbados", "Belarus", "Belgium", "Cote d'Ivoire", "Cambodia", "Cameroon", "Canada", "Cape Verde", "Democratic Republic of the Congo", "Denmark", "Djibouti", "Dominica", "East Timor", "Ecuador", "Egypt", "El Salvador", "Equatorial Guinea")
 
     interface OnActionButtonClickListener {

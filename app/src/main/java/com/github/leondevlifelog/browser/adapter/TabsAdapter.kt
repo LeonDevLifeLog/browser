@@ -1,4 +1,4 @@
-package com.github.leondevlifelog.browser
+package com.github.leondevlifelog.browser.adapter
 
 import android.content.Context
 import android.support.v4.content.ContextCompat
@@ -8,7 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import com.github.leondevlifelog.browser.R
 import com.github.leondevlifelog.browser.bean.TabInfo
+import com.github.leondevlifelog.browser.obverser.ObversableTabsInfo
 
 class TabsAdapter(val context: Context, var tabs: ObversableTabsInfo) : RecyclerView.Adapter<TabsAdapter.ViewHolder>() {
     interface EventLintener {

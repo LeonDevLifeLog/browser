@@ -38,10 +38,10 @@ class ChangePasswordActivity : AppCompatActivity() {
             }
             btnChangePasswordSubmit.isEnabled = false
             AsyncTask.execute {
-                var user = AppDatabaseImpl.instance.UserDao().findUserByUsername("name")
+                var user = AppDatabaseImpl.instance.userDao().findUserByUsername("name")
                 if (user?.password == tieFirstPassword.text.toString()) {
                     user.password = tieFirstPassword.text.toString()
-                    AppDatabaseImpl.instance.UserDao().update(user)
+                    AppDatabaseImpl.instance.userDao().update(user)
                     runOnUiThread { btnChangePasswordSubmit.isEnabled = true }
                 } else {
                     runOnUiThread {

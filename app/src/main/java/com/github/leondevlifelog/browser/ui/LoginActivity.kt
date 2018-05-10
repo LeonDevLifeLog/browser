@@ -39,7 +39,7 @@ class LoginActivity : AppCompatActivity() {
 
     private fun doLoginAction(username: String, passwprd: String) {
         AsyncTask.execute {
-            AppDatabaseImpl.instance.UserDao().insert(User(username = username, password = passwprd, nickname = username))
+            AppDatabaseImpl.instance.userDao().insert(User(username = username, password = passwprd, nickname = username))
             runOnUiThread { _toast("注册成功") }
         }
     }

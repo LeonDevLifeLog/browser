@@ -1,4 +1,4 @@
-package com.github.leondevlifelog.browser
+package com.github.leondevlifelog.browser.obverser
 
 import com.github.leondevlifelog.browser.bean.TabInfo
 import java.util.*
@@ -27,7 +27,7 @@ class ObversableTabsInfo : Observable {
         notifyObservers(tabs.size)
     }
 
-    fun remove(x: TabInfo): Unit {
+    fun remove(x: TabInfo) {
         tabs.remove(x)
         if (tabs.size == 0) {
             var element = TabInfo()

@@ -40,9 +40,9 @@ class AdapterHistory(var data: List<History>?) : RecyclerView.Adapter<AdapterHis
         private var itemHistory: LinearLayout?
 
         constructor(itemView: View?) : super(itemView) {
-            tvTitle = itemView?.findViewById<TextView>(R.id.tvTitleItem)
-            tvUrl = itemView?.findViewById<TextView>(R.id.tvUrlItem)
-            tvTime = itemView?.findViewById<TextView>(R.id.tvTimeItem)
+            tvTitle = itemView?.findViewById(R.id.tvTitleItem)
+            tvUrl = itemView?.findViewById(R.id.tvUrlItem)
+            tvTime = itemView?.findViewById(R.id.tvTimeItem)
             itemHistory = itemView?.findViewById(R.id.itemHistory)
         }
 
