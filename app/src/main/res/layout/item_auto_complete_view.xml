@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:padding="8dp"
+        android:background="@color/white"
+        android:layout_height="wrap_content">
+
+    <ImageView
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:src="@drawable/ic_bookmark"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="8dp"
+            android:id="@+id/ivActBookMark"/>
+
+    <ImageView
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:src="@drawable/ic_history"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="8dp"
+            android:id="@+id/ivActHistory"/>
+
+    <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="网址标题"
+                android:lines="1"
+                android:layout_marginBottom="8dp"
+                android:id="@+id/tvActWebTitle"/>
+
+        <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:lines="1"
+                android:text="网址"
+                android:id="@+id/tvActWebUrl"/>
+    </LinearLayout>
+
+</LinearLayout>

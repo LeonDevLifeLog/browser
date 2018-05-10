@@ -6,7 +6,7 @@
             android:summary="登录后可以同步浏览数据">
         <intent
                 android:targetPackage="com.github.leondevlifelog.browser"
-                android:targetClass="com.github.leondevlifelog.browser.ui.LoginActivity"/>
+                android:targetClass="com.github.leondevlifelog.browser.ui.ProfileActivity"/>
     </Preference>
     <SwitchPreference
             android:defaultValue="false"

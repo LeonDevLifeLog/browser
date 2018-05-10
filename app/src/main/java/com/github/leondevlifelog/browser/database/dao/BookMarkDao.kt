@@ -16,4 +16,7 @@ interface BookMarkDao {
 
     @Update
     fun update(x: BookMark)
+
+    @Query("select * from bookmark where url like '%' || :find || '%' or title like '%'||:find||'%'")
+    fun findByUrl(find: String): MutableList<BookMark>
 }

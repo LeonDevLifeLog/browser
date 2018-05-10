@@ -2,4 +2,10 @@
 <resources>
     <declare-styleable name="AddressBar">
     </declare-styleable>
+    <declare-styleable name="KMPAutoComplTextView">
+        <attr name="completionHighlightColor" format="reference|color"/>
+        <attr name="completionTextColor" format="reference|color"/>
+        <attr name="completionTextSize" format="dimension"/>
+        <attr name="completionIgnoreCase" format="boolean"/>
+    </declare-styleable>
 </resources>

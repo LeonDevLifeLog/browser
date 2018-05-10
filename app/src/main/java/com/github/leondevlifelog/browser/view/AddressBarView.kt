@@ -13,9 +13,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
-import android.widget.ArrayAdapter
 import android.widget.FrameLayout
 import com.github.leondevlifelog.browser.R
+import com.github.leondevlifelog.browser.adapter.AutoCompleteAdapter
 import kotlinx.android.synthetic.main.view_address_bar.view.*
 
 
@@ -132,10 +132,8 @@ class AddressBarView : FrameLayout {
             }
             false
         }
-        val adapter = ArrayAdapter<String>(context, android.R.layout.simple_dropdown_item_1line, COUNTRIES)
-        urlInputBox.setAdapter(adapter)
+        urlInputBox.setAdapter(AutoCompleteAdapter())
     }
-
     /**
      * 初始化drawable
      * @param attrs

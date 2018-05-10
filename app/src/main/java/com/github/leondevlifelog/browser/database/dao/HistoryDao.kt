@@ -16,4 +16,7 @@ interface HistoryDao {
 
     @Query("select * from history")
     fun listHistory(): MutableList<History>
+
+    @Query("select * from history where url like '%' || :find || '%' or title like '%'||:find||'%'")
+    fun findByUrl(find: String): MutableList<History>
 }

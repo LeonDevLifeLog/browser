@@ -5,11 +5,25 @@ import android.arch.persistence.room.Entity
 import android.arch.persistence.room.PrimaryKey
 import android.os.Parcel
 import android.os.Parcelable
+import com.github.leondevlifelog.browser.database.WebData
+import com.github.leondevlifelog.browser.database.WebType
 import java.util.*
 
 @Entity
 data class BookMark(@PrimaryKey(autoGenerate = true) var id: Int = 0, @ColumnInfo var title: String,
-                    @ColumnInfo var url: String, @ColumnInfo var time: Date) : Parcelable {
+                    @ColumnInfo var url: String, @ColumnInfo var time: Date) : Parcelable, WebData {
+    override fun getWebTitle(): String {
+        return title
+    }
+
+    override fun getWebUrl(): String {
+        return url
+    }
+
+    override fun getWebDataType(): WebType {
+        return WebType.BookMark
+    }
+
     constructor(source: Parcel) : this(
             source.readInt(),
             source.readString(),
@@ -32,5 +46,9 @@ data class BookMark(@PrimaryKey(autoGenerate = true) var id: Int = 0, @ColumnInf
             override fun createFromParcel(source: Parcel): BookMark = BookMark(source)
             override fun newArray(size: Int): Array<BookMark?> = arrayOfNulls(size)
         }
+    }
+
+    override fun toString(): String {
+        return url
     }
 }

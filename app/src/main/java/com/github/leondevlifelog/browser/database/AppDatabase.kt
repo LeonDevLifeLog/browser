@@ -6,11 +6,13 @@ import android.arch.persistence.room.TypeConverters
 import com.github.leondevlifelog.browser.database.converter.DateTypeConverter
 import com.github.leondevlifelog.browser.database.dao.BookMarkDao
 import com.github.leondevlifelog.browser.database.dao.HistoryDao
+import com.github.leondevlifelog.browser.database.dao.UserDao
 import com.github.leondevlifelog.browser.database.entities.BookMark
 import com.github.leondevlifelog.browser.database.entities.History
+import com.github.leondevlifelog.browser.database.entities.User
 
 
-@Database(entities = [History::class, BookMark::class], version = 1)
+@Database(entities = [History::class, BookMark::class, User::class], version = 1)
 @TypeConverters(DateTypeConverter::class)
 abstract class AppDatabase : RoomDatabase() {
     /**
@@ -23,4 +25,5 @@ abstract class AppDatabase : RoomDatabase() {
      */
     abstract fun bookMarkDao(): BookMarkDao
 
+    abstract fun UserDao(): UserDao
 }

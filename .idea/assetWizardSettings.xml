@@ -18,7 +18,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/C:/software/AndroidStudio/plugins/android/lib/android.jar!/images/material_design_icons/navigation/ic_arrow_back_black_24dp.xml" />
+                                      <entry key="url" value="jar:file:/C:/software/AndroidStudio/plugins/android/lib/android.jar!/images/material_design_icons/editor/ic_mode_edit_black_24dp.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -28,9 +28,10 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputName" value="ic_arrow_back_aplah" />
+                            <entry key="assetSourceType" value="FILE" />
+                            <entry key="outputName" value="ic_key" />
                             <entry key="overrideSize" value="true" />
-                            <entry key="sourceFile" value="C:\Users\liang\Downloads\close(1).svg" />
+                            <entry key="sourceFile" value="C:\Users\Leon\Downloads\钥匙.svg" />
                           </map>
                         </option>
                       </PersistentState>
