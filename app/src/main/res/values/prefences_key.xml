@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="SP_KEY_SEARCH">SP_KEY_SEARCH</string>
+    <string name="SP_KEY_HOME_PAGE">SP_KEY_HOME_PAGE</string>
+    <string name="SP_KEY_AGENT">SP_KEY_AGENT</string>
+    <string name="SP_KEY_DOWNLOAD_PATH">SP_KEY_DOWNLOAD_PATH</string>
+    <string name="SP_KEY_CLEAR_ON_EXIT">SP_KEY_CLEAR_ON_EXIT</string>
+</resources>

@@ -101,4 +101,5 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:0.22.5'
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:0.22.5"
     implementation 'de.hdodenhof:circleimageview:2.2.0'
+    implementation  'com.thoughtbot:expandablecheckrecyclerview:1.4'
 }

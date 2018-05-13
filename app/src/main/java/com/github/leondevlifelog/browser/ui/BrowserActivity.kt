@@ -16,6 +16,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.os.Environment.DIRECTORY_DOWNLOADS
+import android.preference.PreferenceManager
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.BottomSheetBehavior
 import android.support.design.widget.CoordinatorLayout
@@ -26,6 +27,7 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
+import android.text.TextUtils
 import android.util.Log
 import android.view.KeyEvent
 import android.view.MenuItem
@@ -255,12 +257,19 @@ class BrowserActivity : AppCompatActivity() {
             title.setText(this@BrowserActivity.tabs.selectedTab?.title)
             var url = dialogView.findViewById<TextInputEditText>(R.id.dialogWebUrl)
             url.setText(this@BrowserActivity.tabs.selectedTab?.url)
+            var category = dialogView.findViewById<TextInputEditText>(R.id.dialogCategory)
             dialogBuilder.setView(dialogView)
             dialogBuilder.setTitle("保存书签")
             dialogBuilder.setPositiveButton("保存", { dialog, which ->
+                var strCategory = category.text.toString()
                 AsyncTask.execute {
-                    AppDatabaseImpl.instance.bookMarkDao().insert(BookMark(title = title.text.toString(),
-                            url = url.text.toString(), time = Date()))
+                    if (TextUtils.isEmpty(strCategory)) {
+                        AppDatabaseImpl.instance.bookMarkDao().insert(BookMark(title = title.text.toString(),
+                                url = url.text.toString(), time = Date()))
+                    } else {
+                        AppDatabaseImpl.instance.bookMarkDao().insert(BookMark(title = title.text.toString(),
+                                url = url.text.toString(), time = Date(), category = strCategory))
+                    }
                 }
             })
             dialogBuilder.setNegativeButton("取消", { dialog, which ->
@@ -546,7 +555,8 @@ class BrowserActivity : AppCompatActivity() {
             }
         } else {
             //如果输入的内容不是网址,则进行关键词搜索
-            mAgentWeb.urlLoader.loadUrl("https://m.baidu.com/s?&wd=$urlOrKeyWord")
+            var searchUrl = PreferenceManager.getDefaultSharedPreferences(this).getString(getString(R.string.SP_KEY_SEARCH), "https://m.baidu.com/s?wd=")
+            mAgentWeb.urlLoader.loadUrl("$searchUrl$urlOrKeyWord")
         }
     }
 

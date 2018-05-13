@@ -1,18 +1,16 @@
 package com.github.leondevlifelog.browser.ui
 
-import android.app.Activity
-import android.content.Intent
 import android.os.AsyncTask
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.RecyclerView
+import android.text.TextUtils
 import android.view.MenuItem
-import android.view.View
 import com.github.leondevlifelog.browser.R
-import com.github.leondevlifelog.browser.adapter.AdapterBookMark
+import com.github.leondevlifelog.browser.adapter.CategorpExpandableGroup
+import com.github.leondevlifelog.browser.adapter.MyExpandableRecyclerViewAdapter
 import com.github.leondevlifelog.browser.database.AppDatabaseImpl
-import com.github.leondevlifelog.browser.database.entities.BookMark
 import kotlinx.android.synthetic.main.activity_bookmark.*
 import kotlinx.android.synthetic.main.toolbar.*
 
@@ -33,6 +31,7 @@ class BookmarkActivity : AppCompatActivity() {
         supportActionBar?.title = "书签"
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         rvBookmarkList.addItemDecoration(DividerItemDecoration(this@BookmarkActivity, RecyclerView.VERTICAL))
+        rvBookmarkList.adapter = MyExpandableRecyclerViewAdapter(mutableListOf())
         QueryAllBookMarkDate(this, rvBookmarkList).execute()
     }
 
@@ -47,23 +46,45 @@ class BookmarkActivity : AppCompatActivity() {
     /**
      * 异步查询数据库操作
      */
-    class QueryAllBookMarkDate(var activity: BookmarkActivity, var recyclerView: RecyclerView) : AsyncTask<Unit, Unit, MutableList<BookMark>>() {
-        override fun doInBackground(vararg params: Unit?): MutableList<BookMark> {
+    class QueryAllBookMarkDate(var activity: BookmarkActivity, var recyclerView: RecyclerView) : AsyncTask<Unit, Unit, MutableList<CategorpExpandableGroup>>() {
+        override fun doInBackground(vararg params: Unit?): MutableList<CategorpExpandableGroup> {
             //查询数据库 并返回结果
-            return AppDatabaseImpl.instance.bookMarkDao().listAll()
+            var allCategory = AppDatabaseImpl.instance.bookMarkDao().findAllCategory()
+            var distinct = allCategory.distinct()
+            var result: MutableList<CategorpExpandableGroup> = mutableListOf()
+            distinct.forEach {
+                if (!TextUtils.isEmpty(it))
+                    result.add(CategorpExpandableGroup(it, AppDatabaseImpl.instance.bookMarkDao().findByCategory(it)))
+            }
+            return result
         }
 
-        override fun onPostExecute(result: MutableList<BookMark>) {
+        override fun onPostExecute(result: MutableList<CategorpExpandableGroup>) {
             super.onPostExecute(result)
             //接收到查询结果,通过适配器模式在UI线程更新视图
-            var adapterBookmark = AdapterBookMark(result)
-            adapterBookmark.onItemClickListener = object : AdapterBookMark.OnItemClickListener {
-                override fun onClick(view: View, position: Int) {
-                    //当点击书签的某条数据时,打开相应网址
-                    var intent = Intent()
-                    intent.putExtra(BookmarkActivity.KEY_RESULT_BOOKMARK, result[position])
-                    activity.setResult(Activity.RESULT_OK, intent)
-                    activity.finish()
+//            adapterBookmark.onItemClickListener = object : AdapterBookMark.OnItemClickListener {
+//                override fun onClick(view: View, position: Int) {
+//                    //当点击书签的某条数据时,打开相应网址
+//                    var intent = Intent()
+//                    intent.putExtra(BookmarkActivity.KEY_RESULT_BOOKMARK, result[position])
+//                    activity.setResult(Activity.RESULT_OK, intent)
+//                    activity.finish()
+//                }
+//            }
+            var adapterBookmark = MyExpandableRecyclerViewAdapter(result)
+            adapterBookmark.eventListener = object : MyExpandableRecyclerViewAdapter.EventListener {
+                override fun onChildLongClick(x: Int, y: Int) {
+                    adapterBookmark.isCheckedMode = true
+                    adapterBookmark.notifyDataSetChanged()
+                }
+
+                override fun onChildClick(x: Int, y: Int) {
+                }
+
+                override fun onParentLongClick(x: Int) {
+                }
+
+                override fun onParentClick(x: Int) {
                 }
             }
             recyclerView.adapter = adapterBookmark

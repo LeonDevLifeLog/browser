@@ -3,17 +3,20 @@ package com.github.leondevlifelog.browser.ui
 import android.content.Intent
 import android.os.AsyncTask
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.view.MenuItem
 import com.github.leondevlifelog.browser.R
+import com.github.leondevlifelog.browser.SP_KEY_ISLOGING
+import com.github.leondevlifelog.browser.SP_KEY_USERNAME_LOGINED
 import com.github.leondevlifelog.browser.database.AppDatabaseImpl
-import com.github.leondevlifelog.browser.database.entities.User
 import com.jyuesong.android.kotlin.extract._toast
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.toolbar.*
 
 class LoginActivity : AppCompatActivity() {
-
+    val TAG: String = "LoginActivity"
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -39,8 +42,20 @@ class LoginActivity : AppCompatActivity() {
 
     private fun doLoginAction(username: String, passwprd: String) {
         AsyncTask.execute {
-            AppDatabaseImpl.instance.userDao().insert(User(username = username, password = passwprd, nickname = username))
-            runOnUiThread { _toast("注册成功") }
+            var user = AppDatabaseImpl.instance.userDao().findUserByUsername(username)
+            Log.d(TAG, "$user")
+            if (user?.password == passwprd) {
+                runOnUiThread {
+                    _toast("登录成功")
+                    PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(SP_KEY_ISLOGING, true).apply()
+                    PreferenceManager.getDefaultSharedPreferences(this).edit().putString(SP_KEY_USERNAME_LOGINED, username).apply()
+                    this.finish()
+                }
+            } else {
+                runOnUiThread {
+                    _toast("登录失败")
+                }
+            }
         }
     }
 

@@ -1,35 +1,32 @@
 <PreferenceScreen
         xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory
-            android:title="Preference category">
-        <ListPreference
-                android:defaultValue="1"
-                android:title="主页"
-                android:entries="@array/list_preference_entries"
-                android:entryValues="@array/list_preference_entries"
-                android:key="list_preference_2"/>
-        <ListPreference
-                android:defaultValue="1"
-                android:title="浏览器标识"
-                android:entries="@array/list_preference_entries"
-                android:entryValues="@array/list_preference_entries"
-                android:key="list_preference_1"/>
-        <ListPreference
-                android:defaultValue="1"
-                android:title="搜索引擎"
-                android:entries="@array/list_preference_entries"
-                android:entryValues="@array/list_preference_entries"
-                android:key="list_preference_3"/>
-        <EditTextPreference
-                android:defaultValue="Default value"
-                android:selectAllOnFocus="true"
-                android:singleLine="true"
-                android:title="下载目录"
-                android:key="edit_text_preference_1"/>
-        <SwitchPreference
-                android:defaultValue="false"
-                android:title="退出时清除浏览记录"
-                android:key="switch_preference_1"/>
-    </PreferenceCategory>
+    <ListPreference
+            android:defaultValue="0"
+            android:title="主页"
+            android:entries="@array/list_preference_home_entries"
+            android:entryValues="@array/list_preference_home_entry_values"
+            android:key="@string/SP_KEY_HOME_PAGE"/>
+    <ListPreference
+            android:defaultValue="0"
+            android:title="浏览器标识"
+            android:entries="@array/list_preference_agent_entries"
+            android:entryValues="@array/list_preference_agent_entries_values"
+            android:key="@string/SP_KEY_AGENT"/>
+    <ListPreference
+            android:defaultValue="1"
+            android:title="搜索引擎"
+            android:entries="@array/list_preference_search_entries"
+            android:entryValues="@array/list_preference_search_entries_values"
+            android:key="@string/SP_KEY_SEARCH"/>
+    <EditTextPreference
+            android:defaultValue="/0/Downloads"
+            android:selectAllOnFocus="true"
+            android:singleLine="true"
+            android:title="下载目录"
+            android:key="@string/SP_KEY_DOWNLOAD_PATH"/>
+    <SwitchPreference
+            android:defaultValue="false"
+            android:title="退出时清除浏览记录"
+            android:key="@string/SP_KEY_CLEAR_ON_EXIT"/>
 </PreferenceScreen>

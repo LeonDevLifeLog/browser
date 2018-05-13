@@ -11,7 +11,7 @@ import java.util.*
 
 @Entity
 data class BookMark(@PrimaryKey(autoGenerate = true) var id: Int = 0, @ColumnInfo var title: String,
-                    @ColumnInfo var url: String, @ColumnInfo var time: Date) : Parcelable, WebData {
+                    @ColumnInfo var url: String, @ColumnInfo var time: Date, @ColumnInfo var category: String = "默认分类") : Parcelable, WebData {
     override fun getWebTitle(): String {
         return title
     }
@@ -28,7 +28,8 @@ data class BookMark(@PrimaryKey(autoGenerate = true) var id: Int = 0, @ColumnInf
             source.readInt(),
             source.readString(),
             source.readString(),
-            source.readSerializable() as Date
+            source.readSerializable() as Date,
+            source.readString()
     )
 
     override fun describeContents() = 0
@@ -38,6 +39,7 @@ data class BookMark(@PrimaryKey(autoGenerate = true) var id: Int = 0, @ColumnInf
         writeString(title)
         writeString(url)
         writeSerializable(time)
+        writeString(category)
     }
 
     companion object {

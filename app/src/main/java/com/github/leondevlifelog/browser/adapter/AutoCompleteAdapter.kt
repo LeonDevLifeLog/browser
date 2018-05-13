@@ -1,9 +1,11 @@
 package com.github.leondevlifelog.browser.adapter
 
 import android.graphics.Color
+import android.graphics.Typeface
 import android.text.SpannableString
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
+import android.text.style.StyleSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -70,15 +72,21 @@ class AutoCompleteAdapter : BaseAdapter(), Filterable {
         fun bindData(x: WebData): Unit {
             var spannableUrl = SpannableString(x.getWebUrl())
             var indexOfUri = x.getWebUrl().indexOf(adapter.constraint.toString())
-            if (indexOfUri >= 0)
+            if (indexOfUri >= 0) {
                 spannableUrl.setSpan(ForegroundColorSpan(Color.parseColor("#348a03")),
                         indexOfUri, indexOfUri + adapter.constraint.toString().length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                spannableUrl.setSpan(StyleSpan(Typeface.BOLD),
+                        indexOfUri, indexOfUri + adapter.constraint.toString().length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
             tvUrl.text = spannableUrl
             var spannableTitle = SpannableString(x.getWebTitle())
             var indexOfTitle = x.getWebTitle().indexOf(adapter.constraint.toString())
-            if (indexOfTitle >= 0)
+            if (indexOfTitle >= 0) {
                 spannableTitle.setSpan(ForegroundColorSpan(Color.parseColor("#348a03")),
                         indexOfTitle, indexOfTitle + adapter.constraint.toString().length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+                spannableTitle.setSpan(StyleSpan(Typeface.BOLD),
+                        indexOfTitle, indexOfTitle + adapter.constraint.toString().length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            }
             tvTitle.text = spannableTitle
             if (x.getWebDataType() == WebType.BookMark) {
                 ivHistory.visibility = View.GONE
