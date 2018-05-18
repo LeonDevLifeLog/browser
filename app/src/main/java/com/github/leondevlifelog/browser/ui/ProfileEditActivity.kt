@@ -6,8 +6,8 @@ import android.preference.PreferenceManager
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import com.github.leondevlifelog.browser.R
-import com.github.leondevlifelog.browser.SP_KEY_USERNAME_LOGINED
 import com.github.leondevlifelog.browser.database.AppDatabaseImpl
+import com.github.leondevlifelog.browser.ktx.SP_KEY_USERNAME_LOGINED
 import kotlinx.android.synthetic.main.activity_profile_edit.*
 import kotlinx.android.synthetic.main.toolbar.*
 

@@ -8,9 +8,9 @@ import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.MenuItem
 import com.github.leondevlifelog.browser.R
-import com.github.leondevlifelog.browser.SP_KEY_ISLOGING
-import com.github.leondevlifelog.browser.SP_KEY_USERNAME_LOGINED
 import com.github.leondevlifelog.browser.database.AppDatabaseImpl
+import com.github.leondevlifelog.browser.ktx.SP_KEY_ISLOGING
+import com.github.leondevlifelog.browser.ktx.SP_KEY_USERNAME_LOGINED
 import com.jyuesong.android.kotlin.extract._toast
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.toolbar.*
