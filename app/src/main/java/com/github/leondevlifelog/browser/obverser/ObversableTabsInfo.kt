@@ -3,6 +3,11 @@ package com.github.leondevlifelog.browser.obverser
 import com.github.leondevlifelog.browser.bean.TabInfo
 import java.util.*
 
+/**
+ * 保存已经打开的标签页信息
+ * 可以监听tab数量变化
+ * 及时更新tab按钮数量的显示
+ */
 class ObversableTabsInfo : Observable {
 
     var tabs: MutableList<TabInfo> = MutableList(1, { TabInfo() })

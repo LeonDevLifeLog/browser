@@ -261,7 +261,7 @@ class BrowserActivity : AppCompatActivity() {
             dialogBuilder.setView(dialogView)
             dialogBuilder.setTitle("保存书签")
             dialogBuilder.setPositiveButton("保存", { dialog, which ->
-                var strCategory = category.text.toString()
+                var strCategory: String = category.text.toString()
                 AsyncTask.execute {
                     if (TextUtils.isEmpty(strCategory)) {
                         AppDatabaseImpl.instance.bookMarkDao().insert(BookMark(title = title.text.toString(),

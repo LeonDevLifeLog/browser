@@ -6,6 +6,7 @@ import android.view.MenuItem
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import com.github.leondevlifelog.browser.R
+import com.github.leondevlifelog.browser.ui.base.AppCompatPreferenceActivity
 
 class SettingsActivity : AppCompatPreferenceActivity() {
     override fun onBuildHeaders(target: MutableList<Header>?) {
